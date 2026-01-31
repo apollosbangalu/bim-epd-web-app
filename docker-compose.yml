@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: bim-epd-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - GRAPHDB_URL=http://graphdb:7200
+      - FUSEKI_URL=http://fuseki:3030
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - graphdb
+    restart: unless-stopped
+    networks:
+      - bim-epd-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bim-epd-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - bim-epd-network
+
+  # GraphDB (if running in Docker)
+  graphdb:
+    image: ontotext/graphdb:10.0.0
+    container_name: bim-epd-graphdb
+    ports:
+      - "7200:7200"
+    volumes:
+      - graphdb-data:/opt/graphdb/home
+    environment:
+      - GDB_JAVA_OPTS=-Xmx2g -Xms1g
+    restart: unless-stopped
+    networks:
+      - bim-epd-network
+
+volumes:
+  graphdb-data:
+    driver: local
+
+networks:
+  bim-epd-network:
+    driver: bridge
