@@ -1,22 +1,23 @@
 """
-EPD SPARQL Queries Module
+EPD SPARQL Queries Module - CORRECTED VERSION
 Pre-built SPARQL query templates for EPD (Environmental Product Declaration) ontology
 
-CRITICAL FEATURES:
-- Memory-safe patterns (LIMIT on products with environmental data)
-- Correct property paths (ProcessDataSet → hasProcessInformation → hasKeyDataSetInformation)
-- Proper property names from actual EPD ontology
-- Efficient queries for ~50 products with deep structure
+CRITICAL FIXES:
+1. Correct namespace URI from original Python app
+2. Correct property paths: ProcessDataSet → hasProcessInformation → hasKeyDataSetInformation
+3. Memory-safe patterns with LIMIT clauses
+4. Proper property names from actual EPD ontology
 
 Based on EPD ILCD knowledge graph (~50 products, 32 indicators, 10 phases each)
 """
 from typing import List, Optional
 
 
-# Namespace prefixes for EPD ontology
+# Namespace prefixes for EPD ontology - CORRECTED NAMESPACE
 EPD_PREFIXES = """
 PREFIX epd: <http://www.EpdLcaOntology.com/EpdLcaDataSetOntology/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 """
 
 
@@ -30,7 +31,7 @@ def build_epd_products_by_category_query(
     CORRECTED VERSION with:
     - Proper property path: hasProcessInformation → hasKeyDataSetInformation
     - Correct property names from EPD ontology
-    - No hardcoded LIMIT - uses parameter
+    - Configurable LIMIT for memory safety
     
     Args:
         category_keywords: List of keywords to search in ProductTypeCategory
@@ -92,180 +93,149 @@ WHERE {{
         ?procInfo epd:hasLocation ?location .
     }}
 }}
-LIMIT {min(max_products, 50)}
+LIMIT {max_products}
 """
     return query
 
 
-def build_epd_product_details_query(product_uris: List[str]) -> str:
+def build_epd_product_details_query(product_uri: str) -> str:
     """
-    Build query to fetch comprehensive details for specific EPD products
-    
-    Fetches two critical URIs:
-    1. ProcessDataSet URI (graph identifier)
-    2. Uri property (web link to EPD online)
-    
-    Plus all product details and total GWP.
+    Build query to get detailed information for a specific EPD product
     
     Args:
-        product_uris: List of product URIs (max 10 for performance)
+        product_uri: Full URI of the EPD product
         
     Returns:
         SPARQL query string
     """
-    # Format URIs for VALUES clause
-    uri_values = " ".join([f"<{uri}>" for uri in product_uris[:10]])
-    
     query = f"""{EPD_PREFIXES}
 
-SELECT
-    ?product
+SELECT DISTINCT
     ?name
     ?nameDetail
     ?productTypeCategory
-    ?webLink
     ?technicalPurpose
     ?technologyDescription
+    ?functionalUnit
+    ?referenceFlowName
     ?location
-    (SUM(?gwpValue) AS ?totalGWP)
 WHERE {{
-    # Bind specific products (up to 10)
-    VALUES ?product {{ {uri_values} }}
+    <{product_uri}> a epd:ProcessDataSet ;
+                    epd:hasProcessInformation ?procInfo .
     
-    ?product epd:hasProcessInformation ?procInfo .
     ?procInfo epd:hasKeyDataSetInformation ?keyInfo .
-    
-    # Required fields
     ?keyInfo epd:Name ?name .
     
-    # CRITICAL: Web link from KeyDataSetInformation (Uri property)
-    OPTIONAL {{ ?keyInfo epd:Uri ?webLink }}
+    # Optional fields
+    OPTIONAL {{ ?keyInfo epd:NameDetail ?nameDetail . }}
     
     # Classification
     OPTIONAL {{
-        ?keyInfo epd:NameDetail ?nameDetail ;
-                 epd:hasClassificationOrCategory ?classif .
+        ?keyInfo epd:hasClassificationOrCategory ?classif .
         ?classif epd:ProductTypeCategory ?productTypeCategory .
     }}
     
-    # Technical information
+    # Technical info
     OPTIONAL {{
         ?procInfo epd:hasTechnologicalRepresentativeness ?techRep .
-        ?techRep epd:TechnicalPurposeOfProductOrProcess ?technicalPurpose ;
-                 epd:TechnologyDescriptionIncludingBackgroundSystem ?technologyDescription .
+        ?techRep epd:TechnicalPurposeOfProductOrProcess ?technicalPurpose .
+    }}
+    
+    OPTIONAL {{
+        ?procInfo epd:hasTechnologicalRepresentativeness ?techRep2 .
+        ?techRep2 epd:TechnologyDescriptionIncludingBackgroundSystem ?technologyDescription .
+    }}
+    
+    # Functional unit
+    OPTIONAL {{
+        ?procInfo epd:hasQuantitativeReference ?quantRef .
+        ?quantRef epd:FunctionalUnit ?functionalUnit .
+    }}
+    
+    # Reference flow
+    OPTIONAL {{
+        ?procInfo epd:hasReferenceFlow ?refFlow .
+        ?refFlow epd:Name ?referenceFlowName .
     }}
     
     # Location
     OPTIONAL {{ ?procInfo epd:hasLocation ?location . }}
-    
-    # Total GWP (Global Warming Potential)
-    OPTIONAL {{
-        ?product epd:hasEnvironmentalIndicator ?envInd .
-        ?envInd epd:hasEnvironmentalImpactIndicators ?impactInd .
-        ?impactInd epd:hasPhaseValue ?phaseValue .
-        ?phaseValue epd:hasIndicator ?indicator .
-        
-        # Filter for GWP-Total indicator
-        ?indicator rdfs:label ?indicatorLabel .
-        FILTER(CONTAINS(LCASE(?indicatorLabel), "gwp-total"))
-        
-        ?phaseValue epd:Value ?gwpValue .
-    }}
 }}
-GROUP BY ?product ?name ?nameDetail ?productTypeCategory ?webLink 
-         ?technicalPurpose ?technologyDescription ?location
 """
     return query
 
 
 def build_epd_environmental_indicators_query(
     product_uri: str,
-    indicator_name: Optional[str] = None
+    indicator_labels: Optional[List[str]] = None
 ) -> str:
     """
-    Build MEMORY-SAFE query for environmental indicators
+    Build query to get environmental indicators for an EPD product
     
-    CRITICAL: This query uses subquery with LIMIT to prevent memory issues.
-    EPD knowledge graph has deep structure (4-6 levels) with 16,000+ data points.
+    MEMORY-SAFE VERSION with optional indicator filtering
     
     Args:
-        product_uri: Single product URI
-        indicator_name: Optional indicator filter (e.g., "GWP", "AP", "EP")
+        product_uri: Full URI of the EPD product
+        indicator_labels: Optional list of specific indicator labels to retrieve
+                         (e.g., ["GWP", "ODP", "AP"])
         
     Returns:
         SPARQL query string
     """
+    # Build indicator filter if specified
     indicator_filter = ""
-    if indicator_name:
-        indicator_filter = f'FILTER(CONTAINS(LCASE(?indicatorLabel), "{indicator_name.lower()}"))'
+    if indicator_labels:
+        labels_str = ", ".join([f'"{label}"' for label in indicator_labels])
+        indicator_filter = f"FILTER(?indicatorLabel IN ({labels_str}))"
     
     query = f"""{EPD_PREFIXES}
 
-SELECT
-    ?product
+SELECT DISTINCT
     ?indicatorLabel
-    ?phaseName
-    ?phaseValue
+    ?phase
+    ?value
+    ?unit
 WHERE {{
-    # Bind single product
-    BIND(<{product_uri}> AS ?product)
-    
-    # Get environmental indicators
-    ?product epd:hasEnvironmentalIndicator ?envInd .
-    ?envInd epd:hasEnvironmentalImpactIndicators ?impactInd .
-    ?impactInd epd:hasPhaseValue ?phaseValueObj .
+    <{product_uri}> a epd:ProcessDataSet ;
+                    epd:hasLCIAResult ?lciaResult .
     
     # Get indicator information
-    ?phaseValueObj epd:hasIndicator ?indicator .
+    ?lciaResult epd:hasIndicator ?indicator .
     ?indicator rdfs:label ?indicatorLabel .
     
-    {indicator_filter}
-    
     # Get phase information
-    ?phaseValueObj epd:hasPhase ?phase .
-    ?phase rdfs:label ?phaseName .
+    ?lciaResult epd:hasLifeCyclePhase ?lcPhase .
+    ?lcPhase rdfs:label ?phase .
     
-    # Get value
-    ?phaseValueObj epd:Value ?phaseValue .
+    # Get value and unit
+    ?lciaResult epd:MeanValue ?value .
+    ?lciaResult epd:hasUnit ?unit .
+    
+    {indicator_filter}
 }}
-ORDER BY ?indicatorLabel ?phaseName
+ORDER BY ?indicatorLabel ?phase
+LIMIT 100
 """
     return query
 
 
-def build_epd_products_with_gwp_query(
-    max_products: int = 15
-) -> str:
+def build_all_epd_products_query(limit: int = 50) -> str:
     """
-    Build MEMORY-SAFE query to get products with total GWP
-    
-    CRITICAL: Uses subquery with LIMIT to prevent memory exhaustion.
-    Without LIMIT, query can cause GraphDB to crash with 262MB memory limit.
+    Build query to list all EPD products
     
     Args:
-        max_products: Maximum products to include (default 15, max 20)
+        limit: Maximum number of products to return
         
     Returns:
         SPARQL query string
     """
     query = f"""{EPD_PREFIXES}
 
-SELECT
-    ?product
-    ?name
-    ?productTypeCategory
-    (SUM(?gwpValue) AS ?totalGWP)
+SELECT DISTINCT ?product ?name ?productTypeCategory
 WHERE {{
-    # CRITICAL: Subquery with LIMIT for memory safety
-    {{
-        SELECT DISTINCT ?product WHERE {{
-            ?product a epd:ProcessDataSet .
-        }}
-        LIMIT {min(max_products, 20)}
-    }}
+    ?product a epd:ProcessDataSet ;
+             epd:hasProcessInformation ?procInfo .
     
-    # Get basic info
-    ?product epd:hasProcessInformation ?procInfo .
     ?procInfo epd:hasKeyDataSetInformation ?keyInfo .
     ?keyInfo epd:Name ?name .
     
@@ -273,53 +243,21 @@ WHERE {{
         ?keyInfo epd:hasClassificationOrCategory ?classif .
         ?classif epd:ProductTypeCategory ?productTypeCategory .
     }}
-    
-    # Get GWP values
-    OPTIONAL {{
-        ?product epd:hasEnvironmentalIndicator ?envInd .
-        ?envInd epd:hasEnvironmentalImpactIndicators ?impactInd .
-        ?impactInd epd:hasPhaseValue ?phaseValue .
-        ?phaseValue epd:hasIndicator ?indicator .
-        
-        ?indicator rdfs:label ?indicatorLabel .
-        FILTER(CONTAINS(LCASE(?indicatorLabel), "gwp-total"))
-        
-        ?phaseValue epd:Value ?gwpValue .
-    }}
 }}
-GROUP BY ?product ?name ?productTypeCategory
-ORDER BY ?totalGWP
+ORDER BY ?name
+LIMIT {limit}
 """
     return query
 
 
-def build_epd_count_query(category_keyword: Optional[str] = None) -> str:
+def build_epd_product_count_query() -> str:
     """
-    Build query to count EPD products
+    Build query to count total EPD products
     
-    Args:
-        category_keyword: Optional category filter
-        
     Returns:
         SPARQL query string
     """
-    if category_keyword:
-        query = f"""{EPD_PREFIXES}
-
-SELECT (COUNT(DISTINCT ?product) AS ?count)
-WHERE {{
-    ?product a epd:ProcessDataSet ;
-             epd:hasProcessInformation ?procInfo .
-    
-    ?procInfo epd:hasKeyDataSetInformation ?keyInfo .
-    ?keyInfo epd:hasClassificationOrCategory ?classif .
-    ?classif epd:ProductTypeCategory ?category .
-    
-    FILTER(CONTAINS(LCASE(?category), "{category_keyword.lower()}"))
-}}
-"""
-    else:
-        query = f"""{EPD_PREFIXES}
+    query = f"""{EPD_PREFIXES}
 
 SELECT (COUNT(DISTINCT ?product) AS ?count)
 WHERE {{
@@ -331,28 +269,65 @@ WHERE {{
 
 def build_epd_categories_query() -> str:
     """
-    Build query to get all unique product categories
+    Build query to get all product categories
     
     Returns:
         SPARQL query string
     """
     query = f"""{EPD_PREFIXES}
 
-SELECT DISTINCT ?category
+SELECT DISTINCT ?productTypeCategory (COUNT(?product) AS ?count)
 WHERE {{
     ?product a epd:ProcessDataSet ;
              epd:hasProcessInformation ?procInfo .
     
     ?procInfo epd:hasKeyDataSetInformation ?keyInfo .
     ?keyInfo epd:hasClassificationOrCategory ?classif .
-    ?classif epd:ProductTypeCategory ?category .
+    ?classif epd:ProductTypeCategory ?productTypeCategory .
 }}
-ORDER BY ?category
+GROUP BY ?productTypeCategory
+ORDER BY DESC(?count)
 """
     return query
 
 
-# Validation helpers
+def build_epd_search_by_name_query(search_term: str, limit: int = 20) -> str:
+    """
+    Build query to search EPD products by name
+    
+    Args:
+        search_term: Term to search for in product names
+        limit: Maximum number of results
+        
+    Returns:
+        SPARQL query string
+    """
+    query = f"""{EPD_PREFIXES}
+
+SELECT DISTINCT ?product ?name ?nameDetail ?productTypeCategory
+WHERE {{
+    ?product a epd:ProcessDataSet ;
+             epd:hasProcessInformation ?procInfo .
+    
+    ?procInfo epd:hasKeyDataSetInformation ?keyInfo .
+    ?keyInfo epd:Name ?name .
+    
+    # Case-insensitive search
+    FILTER(CONTAINS(LCASE(?name), LCASE("{search_term}")))
+    
+    OPTIONAL {{ ?keyInfo epd:NameDetail ?nameDetail . }}
+    
+    OPTIONAL {{
+        ?keyInfo epd:hasClassificationOrCategory ?classif .
+        ?classif epd:ProductTypeCategory ?productTypeCategory .
+    }}
+}}
+ORDER BY ?name
+LIMIT {limit}
+"""
+    return query
+
+
 def validate_category_keywords(keywords: List[str]) -> bool:
     """
     Validate category keywords input
@@ -393,5 +368,33 @@ def validate_product_uri(uri: str) -> bool:
     # Must be valid HTTP URI
     if not uri.startswith("http://") and not uri.startswith("https://"):
         return False
+    
+    return True
+
+
+def validate_indicator_labels(labels: List[str]) -> bool:
+    """
+    Validate indicator label inputs
+    
+    Args:
+        labels: List of indicator labels to validate
+        
+    Returns:
+        True if valid, False otherwise
+    """
+    if not labels:
+        return True  # Empty list is valid (means no filtering)
+    
+    # Known valid indicators (based on ILCD standard)
+    valid_indicators = {
+        "GWP", "ODP", "AP", "EP", "POCP", "ADPE", "ADPF",
+        "WDP", "PM", "IRP", "ETP-fw", "HTP-c", "HTP-nc",
+        "SQP", "PERT", "PENRT", "SM", "RSF", "NRSF",
+        "FW", "HWD", "NHWD", "RWD"
+    }
+    
+    for label in labels:
+        if label.upper() not in valid_indicators:
+            return False
     
     return True
