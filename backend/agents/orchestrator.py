@@ -45,7 +45,7 @@ class AgentOrchestrator:
         self.llm_client = create_llm_client(llm_provider)
         
         # Create SPARQL clients for each ontology
-        self.bim_client = SPARQLClientFactory.create_bim_client()
+        self.bim_client = SPARQLClientFactory.create_bimtool_client()
         self.epd_client = SPARQLClientFactory.create_epd_client()
         self.thesaurus_client = SPARQLClientFactory.create_thesaurus_client()
         

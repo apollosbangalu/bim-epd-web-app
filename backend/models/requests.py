@@ -60,6 +60,12 @@ class ChatQueryRequest(BaseModel):
         description="Enable streaming responses"
     )
     
+    # NEW FIELD for Graph RAG ontology selection
+    ontology: Optional[str] = Field(
+        default=None,
+        description="Target ontology for graph_rag queries: 'bimtool', 'epd', or 'thesaurus'"
+    )
+    
     @field_validator('message')
     @classmethod
     def validate_message(cls, v: str) -> str:
@@ -78,6 +84,16 @@ class ChatQueryRequest(BaseModel):
             raise ValueError(f"query_type must be one of {valid_types}")
         return v
     
+    @field_validator('ontology')
+    @classmethod
+    def validate_ontology(cls, v: Optional[str]) -> Optional[str]:
+        """Validate ontology selection"""
+        if v is not None:
+            valid_ontologies = ["bimtool", "epd", "thesaurus"]
+            if v not in valid_ontologies:
+                raise ValueError(f"ontology must be one of {valid_ontologies}")
+        return v
+    
     class Config:
         json_schema_extra = {
             "example": {
@@ -85,7 +101,8 @@ class ChatQueryRequest(BaseModel):
                 "query_type": "cross_match",
                 "llm_provider": "openai",
                 "temperature": 0.0,
-                "stream": False
+                "stream": False,
+                "ontology": None
             }
         }
 
