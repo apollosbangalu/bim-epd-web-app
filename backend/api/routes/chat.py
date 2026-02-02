@@ -7,8 +7,15 @@ ENDPOINTS:
 - POST /chat/cross-match - Dedicated cross-matching endpoint
 
 This module now includes FULL implementation of Graph RAG queries.
+
+FIXES APPLIED:
+1. Improved _extract_material_name() with regex patterns
+2. Fixed bug: undefined 'result' variable
+3. cross_match() now extracts material name from natural language queries
+4. Added debug logging for extraction process
 """
 import logging
+import re
 from fastapi import APIRouter, HTTPException
 from models.requests import ChatQueryRequest, CrossMatchRequest
 from agents.orchestrator import AgentOrchestrator
@@ -52,7 +59,7 @@ async def chat_query(request: ChatQueryRequest):
             
             # Extract material name from message
             material_name = _extract_material_name(request.message)
-            logger.info(f"Extracted material name: {material_name}")
+            logger.info(f"Extracted material name: '{material_name}' from query: '{request.message}'")
             
             # Create orchestrator
             orchestrator = AgentOrchestrator(
@@ -146,6 +153,13 @@ async def cross_match(request: CrossMatchRequest):
     4. Evaluate similarity between BIM material and EPD products
     5. Rank and return top matches
     
+    Automatically extracts material name from natural language queries.
+    
+    Examples:
+        "find epd for concrete c12/15" → "concrete c12/15"
+        "match steel beam" → "steel beam"
+        "concrete" → "concrete"
+    
     Args:
         request: CrossMatchRequest with material_name and matching parameters
         
@@ -166,6 +180,10 @@ async def cross_match(request: CrossMatchRequest):
                 detail="Material name cannot be empty"
             )
         
+        # ✅ CRITICAL FIX: Extract actual material name from natural language query
+        extracted_name = _extract_material_name(request.material_name)
+        logger.info(f"Extracted material name: '{extracted_name}' from query: '{request.material_name}'")
+        
         # Create orchestrator
         logger.info(f"Creating orchestrator with provider: {request.llm_provider or settings.default_llm_provider}")
         orchestrator = AgentOrchestrator(
@@ -173,10 +191,10 @@ async def cross_match(request: CrossMatchRequest):
             include_detailed_info=request.include_details
         )
         
-        # Execute workflow
-        logger.info(f"Executing cross-match workflow for: {request.material_name}")
+        # Execute workflow with extracted material name
+        logger.info(f"Executing cross-match workflow for: {extracted_name}")
         result = await orchestrator.execute_workflow(
-            material_name=request.material_name,
+            material_name=extracted_name,  # ✅ Use extracted name, not raw query
             top_n=request.top_n or 10
         )
         
@@ -196,42 +214,71 @@ async def cross_match(request: CrossMatchRequest):
         )
 
 
-def _extract_material_name(message: str) -> str:
+def _extract_material_name(query: str) -> str:
     """
-    Extract material name from user message
+    Extract material name from natural language query
     
-    Removes common query phrases to isolate the actual material name.
+    Uses regex patterns to identify material names in various query formats.
+    Based on Python app's _parse_material_name() function.
+    
+    ✅ CORRECTED VERSION with bug fixes and improved patterns
+    
+    Supports:
+        - "Find EPD for Concrete_C12/15" → "Concrete_C12/15"
+        - "find epd for concrete c12/15" → "concrete c12/15"
+        - "Match Steel_Beam" → "Steel_Beam"
+        - "get products for wood" → "wood"
+        - "search for masonry brick" → "masonry brick"
+        - "concrete" → "concrete"
     
     Args:
-        message: User's query message
+        query: User's natural language query
         
     Returns:
         Extracted material name
-        
-    Examples:
-        "Find EPD for Concrete_C12/15" -> "Concrete_C12/15"
-        "Match Steel_Beam" -> "Steel_Beam"
-        "concrete" -> "concrete"
     """
-    message = message.lower()
+    query = query.strip()
     
-    # Common phrases to remove
-    remove_phrases = [
-        "find epd for",
-        "find epd products for",
-        "find epd",
-        "match",
-        "search for",
-        "get",
-        "show me",
-        "what is",
-        "tell me about",
-        "cross-match",
-        "cross match"
-    ]
+    # Pattern 1: "action [epd/products] for <material>"
+    # Matches: "find epd for X", "get products for X", "search for X"
+    match = re.search(
+        r'(?:find|match|get|search)(?:\s+epd|\s+products?)?\s+for\s+([A-Za-z0-9_/\-\s]+?)(?:\s+with|\s+top|\s+and|$)',
+        query,
+        re.IGNORECASE
+    )
+    if match:
+        extracted = match.group(1).strip()
+        logger.debug(f"Pattern 1 matched: '{query}' → '{extracted}'")
+        return extracted
     
-    for phrase in remove_phrases:
-        message = message.replace(phrase, "")
-        
-    result = result.replace("_", " ")
-    return message.strip()
+    # Pattern 2: "action <material>" (without "for")
+    # Matches: "match steel", "get concrete"
+    match = re.search(
+        r'(?:match|get|search)\s+([A-Za-z0-9_/\-\s]+?)(?:\s+with|\s+top|\s+and|$)',
+        query,
+        re.IGNORECASE
+    )
+    if match:
+        extracted = match.group(1).strip()
+        logger.debug(f"Pattern 2 matched: '{query}' → '{extracted}'")
+        return extracted
+    
+    # Pattern 3: Remove stop words and common phrases
+    # For queries that don't match patterns above
+    stop_words = {
+        'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+        'find', 'search', 'get', 'show', 'me', 'epd', 'products', 'product',
+        'material', 'materials', 'what', 'is', 'are', 'tell', 'about'
+    }
+    
+    words = query.split()
+    filtered = [w for w in words if w.lower() not in stop_words and len(w) > 1]
+    
+    if filtered:
+        extracted = ' '.join(filtered)
+        logger.debug(f"Stop word removal: '{query}' → '{extracted}'")
+        return extracted
+    
+    # Pattern 4: Fallback - return original if nothing else works
+    logger.debug(f"No pattern matched, returning original: '{query}'")
+    return query

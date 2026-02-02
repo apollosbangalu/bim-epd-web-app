@@ -231,52 +231,99 @@ Return valid JSON only.
 
     async def _query_thesaurus_mapping(self, bim_ontology_uri: str) -> Optional[str]:
         """
-        Query thesaurus for equivalent taxonomy URI using owl:equivalentClass
+        Transform BIM ontology URI to thesaurus taxonomy URI using naming convention
         
-        ✅ CRITICAL FIX: Now uses self.thesaurus_client instead of creating new client
+        CRITICAL: This uses URI transformation (naming pattern), NOT SPARQL query!
+        The Python app does not query owl:equivalentClass - it constructs the URI directly.
         
         Args:
             bim_ontology_uri: BIM ontology URI
                 Example: "http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete"
             
         Returns:
-            Thesaurus taxonomy URI or None
+            Thesaurus taxonomy URI
                 Example: "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#Concrete"
         """
-        # Build SPARQL query to find owl:equivalentClass relationship
-        query = f"""
-    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        try:
+            # Extract category name (fragment after # or last / )
+            # e.g., "http://...#Concrete" → "Concrete"
+            if '#' in bim_ontology_uri:
+                category_name = bim_ontology_uri.split('#')[-1]
+            elif '/' in bim_ontology_uri:
+                category_name = bim_ontology_uri.split('/')[-1]
+            else:
+                self.logger.error(f"Cannot extract category name from URI: {bim_ontology_uri}")
+                return None
+            
+            # Remove any trailing whitespace or special characters
+            category_name = category_name.strip()
+            
+            # Construct thesaurus taxonomy URI using naming convention
+            # Pattern: bimtooltax:{CategoryName}
+            thesaurus_uri = f"http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#{category_name}"
+            
+            # Verify the concept exists in thesaurus (optional validation)
+            # This is a quick check to ensure the concept is actually in the graph
+            validation_query = f"""
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-    SELECT ?thesaurus_uri ?label
-    WHERE {{
-        # Find thesaurus concept equivalent to BIM ontology concept
-        ?thesaurus_uri owl:equivalentClass <{bim_ontology_uri}> .
-        
-        # Ensure it's from bimtooltax namespace
-        FILTER(STRSTARTS(STR(?thesaurus_uri), "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#"))
-        
-        # Get label (English only)
-        OPTIONAL {{
-            ?thesaurus_uri skos:prefLabel ?label .
-            FILTER(LANG(?label) = "en")
-        }}
+    ASK {{
+        <{thesaurus_uri}> skos:prefLabel ?label .
     }}
-    LIMIT 1
     """
-        
-        try:
-            # ✅ USE self.thesaurus_client (not creating new client)
-            results = await self.thesaurus_client.query(query)
             
-            if results and len(results) > 0:
-                return results[0].get("thesaurus_uri")
+            # Query thesaurus to validate concept exists
+            exists = await self._validate_concept_exists(thesaurus_uri, validation_query)
+            
+            if exists:
+                self.logger.debug(f"✓ Validated thesaurus concept exists: {thesaurus_uri}")
+                return thesaurus_uri
             else:
-                return None
+                self.logger.warning(
+                    f"⚠ Constructed thesaurus URI but concept not found in graph: {thesaurus_uri}. "
+                    f"Returning it anyway - it may still have mappings."
+                )
+                # Return anyway - concept might exist even without prefLabel
+                return thesaurus_uri
                 
         except Exception as e:
-            self.logger.error(f"Thesaurus mapping query failed: {e}")
+            self.logger.error(f"Thesaurus URI transformation failed: {e}")
             return None
+
+
+    async def _validate_concept_exists(self, concept_uri: str, ask_query: str) -> bool:
+        """
+        Validate that a concept exists in the thesaurus graph
+        
+        Args:
+            concept_uri: The concept URI to validate
+            ask_query: SPARQL ASK query to check existence
+            
+        Returns:
+            True if concept exists, False otherwise
+        """
+        try:
+            # Execute ASK query
+            result = await self.thesaurus_client.query(ask_query)
+            
+            # ASK queries return boolean in different formats depending on endpoint
+            # Check common response formats
+            if isinstance(result, bool):
+                return result
+            elif isinstance(result, dict):
+                # Fuseki returns: {"boolean": true/false}
+                return result.get("boolean", False)
+            elif isinstance(result, list):
+                # Some endpoints return list with single boolean value
+                return len(result) > 0
+            else:
+                # Unknown format - assume it might exist
+                self.logger.warning(f"Unknown ASK query result format: {type(result)}")
+                return True
+                
+        except Exception as e:
+            self.logger.warning(f"Concept validation failed: {e}. Assuming concept exists.")
+            return True  # Fail open - assume it exists
 
 
     def _format_material_data(self, material_data: Dict[str, str]) -> str:

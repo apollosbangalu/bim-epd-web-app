@@ -55,9 +55,14 @@ class AgentOrchestrator:
         self.thesaurus_client = SPARQLClientFactory.create_thesaurus_client()
         
         # ✅ Log client initialization for debugging
-        logger.info(f"✓ BIM SPARQL client initialized: {self.bim_client.endpoint}")
-        logger.info(f"✓ EPD SPARQL client initialized: {self.epd_client.endpoint}")
-        logger.info(f"✓ Thesaurus SPARQL client initialized: {self.thesaurus_client.endpoint}")
+        active_bim = self.bim_client.get_active_endpoint() or "unknown"
+        logger.info(f"✓ BIM SPARQL client initialized (using {active_bim})")
+
+        active_epd = self.epd_client.get_active_endpoint() or "unknown"
+        logger.info(f"✓ EPD SPARQL client initialized (using {active_epd})")
+
+        active_thes = self.thesaurus_client.get_active_endpoint() or "unknown"
+        logger.info(f"✓ Thesaurus SPARQL client initialized (using {active_thes})")
         
         # Initialize ALL specialized agents
         self._initialize_agents()
