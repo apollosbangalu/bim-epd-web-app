@@ -1,5 +1,8 @@
 """
-Enhanced Agent Orchestrator with proper agent initialization
+Enhanced Agent Orchestrator - FIXED VERSION WITH PROPER CLIENT PASSING
+Orchestrates complete 5-step cross-matching workflow
+
+CRITICAL FIX: Now passes thesaurus_client to BIM Extractor Agent
 """
 import logging
 from typing import Dict, Any, List, Optional
@@ -22,6 +25,8 @@ class AgentOrchestrator:
     Orchestrates complete 5-step cross-matching workflow
     
     Initializes ALL specialized agents and coordinates execution.
+    
+    FIXED: Now properly passes thesaurus client to BIM Extractor
     """
     
     def __init__(
@@ -49,22 +54,33 @@ class AgentOrchestrator:
         self.epd_client = SPARQLClientFactory.create_epd_client()
         self.thesaurus_client = SPARQLClientFactory.create_thesaurus_client()
         
+        # ✅ Log client initialization for debugging
+        logger.info(f"✓ BIM SPARQL client initialized: {self.bim_client.endpoint}")
+        logger.info(f"✓ EPD SPARQL client initialized: {self.epd_client.endpoint}")
+        logger.info(f"✓ Thesaurus SPARQL client initialized: {self.thesaurus_client.endpoint}")
+        
         # Initialize ALL specialized agents
         self._initialize_agents()
         
         logger.info("AgentOrchestrator initialized successfully")
     
     def _initialize_agents(self):
-        """Initialize all specialized agents"""
+        """
+        Initialize all specialized agents
+        
+        ✅ CRITICAL FIX: Pass thesaurus_client to BIM Extractor
+        """
         logger.info("Initializing specialized agents...")
         
         try:
             # Step 1 Agent: BIM Extractor
+            # ✅ NOW INCLUDES THESAURUS CLIENT
             self.bim_extractor = BIMExtractorAgent(
                 llm_client=self.llm_client,
-                sparql_client=self.bim_client
+                sparql_client=self.bim_client,
+                thesaurus_client=self.thesaurus_client  # ✅ CRITICAL FIX
             )
-            logger.info("✓ BIM Extractor Agent initialized")
+            logger.info("✓ BIM Extractor Agent initialized (with thesaurus client)")
             
             # Step 2 Agent: Thesaurus Navigator  
             self.thesaurus_navigator = ThesaurusNavigatorAgent(
@@ -118,11 +134,29 @@ class AgentOrchestrator:
         
         try:
             # STEP 1: Extract BIM Material
+            # ✅ Now uses thesaurus client internally for URI transformation
             step1_result = await self._execute_step_1(material_name, workflow_steps)
             if not step1_result["success"]:
                 return self._create_error_response("BIM material not found", workflow_steps)
             
             bim_material = step1_result["data"]
+            
+            # ✅ LOG THE TRANSFORMATION RESULT
+            raw_data = bim_material.get("raw_data", {})
+            primary_thesaurus = raw_data.get("primary_category_thesaurus_uri")
+            secondary_thesaurus = raw_data.get("secondary_category_thesaurus_uri")
+            
+            logger.info(f"BIM Material extracted:")
+            logger.info(f"  - Primary thesaurus URI: {primary_thesaurus}")
+            logger.info(f"  - Secondary thesaurus URI: {secondary_thesaurus}")
+            
+            # ✅ VALIDATE TRANSFORMATION SUCCESS
+            if not primary_thesaurus:
+                logger.error("❌ PRIMARY THESAURUS URI MISSING - Step 1 transformation failed!")
+                return self._create_error_response(
+                    "BIM category transformation failed - no thesaurus URI found",
+                    workflow_steps
+                )
             
             # STEP 2: Navigate Thesaurus
             step2_result = await self._execute_step_2(bim_material, workflow_steps)
@@ -165,15 +199,18 @@ class AgentOrchestrator:
                 "concept_mappings": concept_mappings,
                 "matches": ranked_matches,
                 "workflow_steps": workflow_steps,
-                "total_candidates": len(epd_candidates),
                 "execution_time": execution_time,
-                "timestamp": datetime.now().isoformat()
+                "metadata": {
+                    "material_name": material_name,
+                    "total_matches": len(ranked_matches),
+                    "llm_provider": self.llm_provider
+                }
             }
             
         except Exception as e:
             logger.error(f"Workflow failed: {e}", exc_info=True)
             return self._create_error_response(str(e), workflow_steps)
-
+    
     async def _execute_step_1(
         self, 
         material_name: str, 
@@ -191,6 +228,7 @@ class AgentOrchestrator:
         
         try:
             # Call BIM Extractor Agent
+            # ✅ Now uses thesaurus client internally
             result = await self.bim_extractor.execute({
                 "material_name": material_name
             })
@@ -204,7 +242,7 @@ class AgentOrchestrator:
                 })
                 return {"success": False, "error": error}
             
-            # ✅ FIX: Extract the DATA portion from agent result
+            # Extract the data portion
             data = result.get("data", {})
             
             step_time = time.time() - step_start
@@ -213,15 +251,17 @@ class AgentOrchestrator:
                 "status": "completed",
                 "completed_at": datetime.now().isoformat(),
                 "execution_time": step_time,
-                "result_summary": f"Extracted {data.get('raw_data', {}).get('name', 'material')} with {len(data.get('raw_data', {}))} fields",
+                "result_summary": f"Extracted: {data.get('raw_data', {}).get('name', 'Unknown')}",
                 "details": {
                     "material_name": data.get("raw_data", {}).get("name"),
-                    "primary_category": data.get("raw_data", {}).get("primary_category_label"),
-                    "fields_extracted": len(data.get("raw_data", {}))
+                    "primary_category": data.get("raw_data", {}).get("class"),
+                    "secondary_category": data.get("raw_data", {}).get("subclass"),
+                    "primary_thesaurus_uri": data.get("raw_data", {}).get("primary_category_thesaurus_uri"),
+                    "secondary_thesaurus_uri": data.get("raw_data", {}).get("secondary_category_thesaurus_uri")
                 }
             })
             
-            # Return just the data portion (not the whole agent result)
+            # Return just the data portion
             return {"success": True, "data": data}
             
         except Exception as e:
@@ -249,7 +289,6 @@ class AgentOrchestrator:
         
         try:
             # Call Thesaurus Navigator Agent
-            # bim_material already has the correct structure: {"raw_data": {...}, "semantic_interpretation": {...}}
             result = await self.thesaurus_navigator.execute(bim_material)
             
             # Check if agent execution was successful
@@ -261,7 +300,7 @@ class AgentOrchestrator:
                 })
                 return {"success": False, "error": error}
             
-            # ✅ FIX: Extract the DATA portion
+            # Extract the data portion
             data = result.get("data", {})
             
             step_time = time.time() - step_start
@@ -279,8 +318,7 @@ class AgentOrchestrator:
                 "details": {
                     "total_mappings": len(mappings),
                     "exact_matches": exact_count,
-                    "close_matches": close_count,
-                    "concepts": [m.get("epd_label") for m in mappings[:5]]
+                    "close_matches": close_count
                 }
             })
             
@@ -294,7 +332,7 @@ class AgentOrchestrator:
             })
             return {"success": False, "error": str(e)}
 
-
+    
     async def _execute_step_3(
         self, 
         concept_mappings: Dict[str, Any], 
@@ -312,13 +350,8 @@ class AgentOrchestrator:
         
         try:
             # Call EPD Extractor Agent
-            result = await self.epd_extractor.execute({
-                "concept_mappings": concept_mappings.get("mappings", []),
-                "max_products": 50,
-                "include_detailed_info": self.include_detailed_info
-            })
+            result = await self.epd_extractor.execute(concept_mappings)
             
-            # Check if agent execution was successful
             if not result.get("success"):
                 error = result.get("error", "Unknown error")
                 workflow_steps[-1].update({
@@ -327,32 +360,22 @@ class AgentOrchestrator:
                 })
                 return {"success": False, "error": error}
             
-            # ✅ FIX: Extract the DATA portion
-            # EPD extractor returns {"products": [...]} in its data
             data = result.get("data", {})
-            products = data.get("products", [])
+            candidates = data.get("candidates", [])
             
             step_time = time.time() - step_start
-            
-            # Extract product statistics
-            exact_products = sum(1 for p in products if p.get("match_quality") == "exact")
-            close_products = sum(1 for p in products if p.get("match_quality") == "close")
             
             workflow_steps[-1].update({
                 "status": "completed",
                 "completed_at": datetime.now().isoformat(),
                 "execution_time": step_time,
-                "result_summary": f"Retrieved {len(products)} EPD products ({exact_products} from exact matches, {close_products} from close matches)",
+                "result_summary": f"Found {len(candidates)} EPD candidates",
                 "details": {
-                    "total_products": len(products),
-                    "from_exact_matches": exact_products,
-                    "from_close_matches": close_products,
-                    "sample_products": [p.get("raw_data", {}).get("name") for p in products[:3]]
+                    "total_candidates": len(candidates)
                 }
             })
             
-            # Return the products list directly (for consistency with Step 4's expectations)
-            return {"success": True, "data": products}
+            return {"success": True, "data": data}
             
         except Exception as e:
             workflow_steps[-1].update({
@@ -360,12 +383,11 @@ class AgentOrchestrator:
                 "error": str(e)
             })
             return {"success": False, "error": str(e)}
-
-
+    
     async def _execute_step_4(
-        self,
+        self, 
         bim_material: Dict[str, Any],
-        epd_candidates: List[Dict[str, Any]],
+        epd_candidates: Dict[str, Any],
         concept_mappings: Dict[str, Any],
         workflow_steps: List[Dict]
     ) -> Dict[str, Any]:
@@ -383,11 +405,10 @@ class AgentOrchestrator:
             # Call Similarity Judge Agent
             result = await self.similarity_judge.execute({
                 "bim_material": bim_material,
-                "epd_products": epd_candidates,  # Note: agent expects "epd_products" not "epd_candidates"
+                "epd_candidates": epd_candidates,
                 "concept_mappings": concept_mappings
             })
             
-            # Check if agent execution was successful
             if not result.get("success"):
                 error = result.get("error", "Unknown error")
                 workflow_steps[-1].update({
@@ -396,31 +417,25 @@ class AgentOrchestrator:
                 })
                 return {"success": False, "error": error}
             
-            # ✅ FIX: Extract the DATA portion
             data = result.get("data", {})
-            evaluations = data.get("evaluations", [])
+            evaluated = data.get("evaluated_products", [])
             
             step_time = time.time() - step_start
             
-            # Extract evaluation statistics
-            avg_score = sum(e.get("scores", {}).get("total_score", 0) for e in evaluations) / len(evaluations) if evaluations else 0
-            high_scores = sum(1 for e in evaluations if e.get("scores", {}).get("total_score", 0) >= 0.7)
+            avg_score = sum(p.get("total_score", 0) for p in evaluated) / len(evaluated) if evaluated else 0
             
             workflow_steps[-1].update({
                 "status": "completed",
                 "completed_at": datetime.now().isoformat(),
                 "execution_time": step_time,
-                "result_summary": f"Evaluated {len(evaluations)} products (avg score: {avg_score:.2f}, {high_scores} high-confidence)",
+                "result_summary": f"Evaluated {len(evaluated)} products (avg score: {avg_score:.2f})",
                 "details": {
-                    "total_evaluated": len(evaluations),
-                    "average_score": round(avg_score, 3),
-                    "high_confidence_count": high_scores,
-                    "dimensions": ["name", "category", "functional", "technical", "specificity"]
+                    "evaluated_count": len(evaluated),
+                    "average_score": round(avg_score, 2)
                 }
             })
             
-            # Return the evaluations list
-            return {"success": True, "data": evaluations}
+            return {"success": True, "data": data}
             
         except Exception as e:
             workflow_steps[-1].update({
@@ -428,11 +443,10 @@ class AgentOrchestrator:
                 "error": str(e)
             })
             return {"success": False, "error": str(e)}
-
-
+    
     async def _execute_step_5(
-        self,
-        evaluated_products: List[Dict[str, Any]],
+        self, 
+        evaluated_products: Dict[str, Any],
         top_n: int,
         min_confidence: Optional[str],
         workflow_steps: List[Dict]
@@ -450,13 +464,11 @@ class AgentOrchestrator:
         try:
             # Call Ranking Agent
             result = await self.ranking_agent.execute({
-                "evaluations": evaluated_products,
-                "concept_mappings": [],
+                "evaluated_products": evaluated_products,
                 "top_n": top_n,
                 "min_confidence": min_confidence
             })
             
-            # Check if agent execution was successful
             if not result.get("success"):
                 error = result.get("error", "Unknown error")
                 workflow_steps[-1].update({
@@ -465,33 +477,28 @@ class AgentOrchestrator:
                 })
                 return {"success": False, "error": error}
             
-            # ✅ FIX: Extract the DATA portion
             data = result.get("data", {})
-            ranked_matches = data.get("ranked_matches", [])
-            summary = data.get("ranking_summary", {})
+            ranked = data.get("ranked_matches", [])
             
             step_time = time.time() - step_start
+            
+            # Count by confidence level
+            exact_count = sum(1 for m in ranked if m.get("confidence") == "HIGH")
+            close_count = sum(1 for m in ranked if m.get("confidence") == "MEDIUM")
             
             workflow_steps[-1].update({
                 "status": "completed",
                 "completed_at": datetime.now().isoformat(),
                 "execution_time": step_time,
-                "result_summary": f"Ranked {summary.get('total_ranked', 0)} matches (top {top_n} returned)",
+                "result_summary": f"Ranked {len(ranked)} matches ({exact_count} high, {close_count} medium confidence)",
                 "details": {
-                    "total_ranked": summary.get("total_ranked", 0),
-                    "exact_matches": summary.get("exact_matches", 0),
-                    "close_matches": summary.get("close_matches", 0),
-                    "top_n": top_n,
-                    "confidence_levels": {
-                        "HIGH": sum(1 for m in ranked_matches if m.get("confidence") == "HIGH"),
-                        "MEDIUM": sum(1 for m in ranked_matches if m.get("confidence") == "MEDIUM"),
-                        "LOW": sum(1 for m in ranked_matches if m.get("confidence") == "LOW")
-                    }
+                    "total_matches": len(ranked),
+                    "high_confidence": exact_count,
+                    "medium_confidence": close_count
                 }
             })
             
-            # Return the ranked matches
-            return {"success": True, "data": ranked_matches}
+            return {"success": True, "data": ranked}
             
         except Exception as e:
             workflow_steps[-1].update({
@@ -499,16 +506,16 @@ class AgentOrchestrator:
                 "error": str(e)
             })
             return {"success": False, "error": str(e)}
-
+    
     def _create_error_response(
         self, 
         error_message: str, 
         workflow_steps: List[Dict]
     ) -> Dict[str, Any]:
-        """Create error response with workflow state"""
+        """Create standardized error response"""
         return {
             "success": False,
             "error": error_message,
             "workflow_steps": workflow_steps,
-            "timestamp": datetime.now().isoformat()
+            "matches": []
         }

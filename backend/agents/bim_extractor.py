@@ -1,15 +1,9 @@
 """
-BIM Extractor Agent Module
+BIM Extractor Agent Module - CORRECTED FIX
 First agent in the 5-step workflow
 
-Extracts comprehensive building material data from BIMTool ontology:
-- 9+ fields including name, categories, properties
-- Material definition from rdfs:comment (critical for composition understanding)
-- Primary and secondary categories (secondary is optional)
-- Semantic interpretation using LLM
-
-Input: Material name (from user)
-Output: Complete BIM material data structure
+CRITICAL FIX: Accepts thesaurus_client parameter and uses it properly
+WITHOUT changing any function names or imports
 """
 import logging
 from typing import Optional
@@ -30,11 +24,26 @@ class BIMExtractorAgent(BaseAgent):
     Agent for extracting BIM material data
     
     Step 1 of 5: Extract complete material information from BIMTool knowledge graph
+    
+    ✅ CRITICAL FIX: Now accepts thesaurus_client parameter
     """
     
-    def __init__(self, llm_client: BaseLLMClient, sparql_client: SPARQLClient):
-        """Initialize BIM Extractor Agent"""
+    def __init__(
+        self, 
+        llm_client: BaseLLMClient, 
+        sparql_client: SPARQLClient,
+        thesaurus_client: SPARQLClient  # ✅ ADD THIS PARAMETER
+    ):
+        """
+        Initialize BIM Extractor Agent
+        
+        Args:
+            llm_client: Language model client
+            sparql_client: SPARQL client for BIM ontology
+            thesaurus_client: SPARQL client for thesaurus (for URI transformation)
+        """
         super().__init__(llm_client, sparql_client, "BIMExtractorAgent")
+        self.thesaurus_client = thesaurus_client  # ✅ STORE THESAURUS CLIENT
         
         # System prompt for LLM interpretation
         self.system_prompt = """
@@ -95,10 +104,6 @@ Return ONLY the JSON, no additional text.
             
         Returns:
             Dictionary with complete material data and semantic interpretation
-            
-        Raises:
-            ValueError: If material name is invalid or not found
-            Exception: If extraction fails
         """
         # Validate input
         self.validate_input(input_data, ["material_name"])
@@ -150,6 +155,7 @@ Provide semantic interpretation focusing on:
 Return valid JSON only.
 """
             
+            # Get LLM interpretation
             interpretation = await self.llm_interpret(
                 prompt=prompt,
                 system_prompt=self.system_prompt,
@@ -157,16 +163,18 @@ Return valid JSON only.
                 parse_json=True
             )
             
-            # Validate interpretation structure
-            if "raw_data" not in interpretation or "semantic_interpretation" not in interpretation:
-                self.logger.error("LLM returned invalid structure")
-                # Fallback to raw data only
-                interpretation = {
-                    "raw_data": self._convert_to_raw_data(material_data),
-                    "semantic_interpretation": self._create_default_interpretation(material_data)
-                }
+            # Validate structure
+            if "raw_data" not in interpretation:
+                interpretation["raw_data"] = self._convert_to_raw_data(material_data)
+            if "semantic_interpretation" not in interpretation:
+                interpretation["semantic_interpretation"] = self._create_default_interpretation(
+                    interpretation["raw_data"]
+                )
             
+            # Step 4: Transform BIM ontology URIs to thesaurus taxonomy URIs
+            # ✅ THIS IS THE CRITICAL TRANSFORMATION STEP
             interpretation = await self._transform_to_thesaurus_uris(interpretation)
+            
             self.logger.info("Successfully extracted and interpreted BIM material")
             
             return self.create_result(
@@ -188,7 +196,6 @@ Return valid JSON only.
         """
         Transform BIM ontology URIs to thesaurus taxonomy URIs using owl:equivalentClass
         
-        This matches the Python app's _map_to_thesaurus() method EXACTLY.
         Uses SPARQL to query the thesaurus graph for owl:equivalentClass relationships.
         
         Args:
@@ -226,7 +233,7 @@ Return valid JSON only.
         """
         Query thesaurus for equivalent taxonomy URI using owl:equivalentClass
         
-        This replicates the Python app's thesaurus mapping agent behavior EXACTLY.
+        ✅ CRITICAL FIX: Now uses self.thesaurus_client instead of creating new client
         
         Args:
             bim_ontology_uri: BIM ontology URI
@@ -259,19 +266,8 @@ Return valid JSON only.
     """
         
         try:
-            # Import here to avoid circular dependency
-            from sparql.client import SPARQLClient
-            from core.config import settings
-            
-            # Create thesaurus SPARQL client
-            thesaurus_client = SPARQLClient(
-                repository_name="thesaurus",
-                fuseki_url=settings.fuseki_url,
-                graphdb_url=settings.graphdb_url
-            )
-            
-            # Execute query
-            results = await thesaurus_client.query(query)
+            # ✅ USE self.thesaurus_client (not creating new client)
+            results = await self.thesaurus_client.query(query)
             
             if results and len(results) > 0:
                 return results[0].get("thesaurus_uri")
@@ -311,22 +307,17 @@ Return valid JSON only.
             "primary_category_label": material_data.get("primaryCategoryLabel", ""),
             "secondary_category_uri": material_data.get("secondaryCategoryUri"),
             "secondary_category_label": material_data.get("secondaryCategoryLabel"),
-            "class": material_data.get("class"),
-            "subclass": material_data.get("subclass"),
-            "property_set": material_data.get("propertySet")
+            "class": material_data.get("primaryCategoryLabel", ""),
+            "subclass": material_data.get("secondaryCategoryLabel"),
+            "property_set": material_data.get("propertySetName")
         }
     
-    def _create_default_interpretation(self, material_data: Dict[str, str]) -> Dict[str, str]:
+    def _create_default_interpretation(self, raw_data: Dict[str, str]) -> Dict[str, str]:
         """Create default semantic interpretation if LLM fails"""
-        name = material_data.get("name", "")
-        category = material_data.get("primaryCategoryLabel", "")
-        description = material_data.get("description", "")
-        comment = material_data.get("comment", "")
-        
         return {
-            "material_type": category,
-            "main_characteristics": description or f"{category} material",
-            "typical_uses": f"Typical {category.lower()} applications",
-            "key_properties": "See property set for details",
-            "composition_summary": comment or f"{name} - {category}"
+            "material_type": raw_data.get("class", "Unknown"),
+            "main_characteristics": raw_data.get("description", "No description available"),
+            "typical_uses": "General construction applications",
+            "key_properties": raw_data.get("keywords", "No keywords available"),
+            "composition_summary": raw_data.get("comment", "No composition data available")
         }

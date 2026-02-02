@@ -1,0 +1,374 @@
+material_uri,material_name,primary_category,secondary_category,rdfs_comment,description
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Acoustic_Ceiling_Tile_24_x_24,Acoustic Ceiling Tile 24 x 24,Ceiling,Ceiling,Tile used for sound absorption in ceilings.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Acoustic_Ceiling_Tile_24_x_48,Acoustic Ceiling Tile 24 x 48,Ceiling,AcousticCeilingTile,Ceiling tile designed for sound absorption.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Acrylic_Clear,Acrylic Clear,Plastic,Thermoplastic,Transparent synthetic polymer material.,"Cast acrylic, average values"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Air,Air,Gas,Gas,Gaseous substance present in the atmosphere.,"Air, properties at atmospheric pressure"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminium,Aluminium,Metal,Aluminum,Lightweight and corrosion-resistant metal.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_1100H14,Aluminum 1100H14,Metal,Aluminum,Aluminum alloy with specific characteristics.,"Pure aluminum, strain hardened"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_1100O,Aluminum 1100O,Metal,Aluminum,Annealed aluminum alloy with specific properties.,"Pure aluminum, soft, annealed"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_2014T4,Aluminum 2014T4,Metal,Aluminum,Heat-treated aluminum alloy with specific properties.,"Aluminum copper alloy, heat treated, aged"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_2014T6,Aluminum 2014T6,Metal,Aluminum,Heat-treated aluminum alloy with specific properties.,"Aluminum copper alloy, heat treated, artifically aged"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_3003H12,Aluminum 3003H12,Metal,Aluminum,Aluminum alloy with specific characteristics.,"Aluminum manganese alloy, strain hardened"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_5005,Aluminum 5005,Metal,Aluminum,Aluminum alloy with specific properties.,"Aluminum magnesium alloy, strain hardened"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_5052,Aluminum 5052,Metal,Aluminum,Aluminum alloy with specific properties.,"Aluminum magnesium alloy, strain hardened"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_7075,Aluminum 7075,Metal,Aluminum,High-strength aluminum alloy with specific properties.,"Aluminum zinc alloy, annealed"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_Anodized_Blue,Aluminum Anodized Blue,Metal,Aluminum,Aluminum with blue-tinted anodized finish.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_Anodized_Bronze,Aluminum Anodized Bronze,Metal,Aluminum,Aluminum with bronze-tinted anodized finish.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_Anodized_Red,Aluminum Anodized Red,Metal,Aluminum,Aluminum with red-tinted anodized finish.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Aluminum_Anodized_Silver,Aluminum Anodized Silver,Metal,Aluminum,Aluminum with silver-tinted anodized finish.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Argon,Argon,Gas,Gas,Inert gas used to enhance thermal insulation in windows.,"Argon, properties at atmospheric pressure"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Ash,Ash,Wood,HardWood,HardWood with a distinctive grain pattern.,White Ash
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Asphalt_Bitumen,Asphalt Bitumen,Asphalt,AsphaltBitumen,Material used in asphalt for road construction.,Asphalt coating
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Asphalt_Pavement,Asphalt Pavement,Asphalt,AsphaltPaving,Pavement material made of asphalt.,Asphalt paving
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Asphalt_Pavement_Dark_Grey,Asphalt Pavement Dark Grey,Asphalt,AsphaltPaving,Dark gray asphalt pavement.,Asphalt paving
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Asphalt_Pavement_Light_Grey,Asphalt Pavement Light Grey,Asphalt,AsphaltPaving,Light gray asphalt pavement.,Asphalt paving
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Asphalt_Shingle,Asphalt Shingle,Asphalt,AsphaltShingle,Roofing material made of asphalt.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Bamboo_as_Individual,Bamboo,Flooring,Bamboo,Fast-growing woody plant used as building material.,Laminated bamboo sheets
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Birch,Birch,Wood,HardWood,Light-colored hardwood with a fine texture.,Yellow Birch
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Birch__Glossy,Birch  Glossy,Wood,HardWood,"Birch wood with a polished, glossy finish.",Yellow Birch
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Birch__Semigloss,Birch  Semigloss,Wood,HardWood,Birch wood with a semi-gloss finish.,Yellow Birch
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brass,Brass,Metal,NonFerrous,Alloy of copper and zinc with various applications.,Free cutting brass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Adobe_as_Individual,Brick Adobe,Masonry,BrickAdobe,Traditional building material made from sun-dried clay.,Mud brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Common,Brick Common,Masonry,BrickCommon,Standard rectangular brick for construction.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Common_Brown,Brick Common Brown,Masonry,BrickCommon,Standard brown-colored fired clay brick.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Common_Grey,Brick Common Grey,Masonry,BrickCommon,Standard grey-colored fired clay brick.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Common_Red,Brick Common Red,Masonry,BrickCommon,Standard red-colored fired clay brick.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Cored,Brick Cored,Masonry,BrickCored,Brick with voids or perforations to reduce weight.,Cored brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Dark_Blend_Running,Brick Dark Blend Running,Masonry,BrickCommon,Brick in a dark blend pattern for running bond.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Dark_Blend_Soldier,Brick Dark Blend Soldier,Masonry,BrickCommon,Brick in a dark blend pattern for soldier bond.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Engineering,Brick Engineering,Masonry,BrickCommon,High-strength brick used in structural applications.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Engineering_Grey,Brick Engineering Grey,Masonry,BrickCommon,High-strength grey-colored brick for structural use.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Engineering_Soldier_Course,Brick Engineering Soldier Course,Masonry,BrickCommon,High-strength brick for soldier course applications.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Horizontal_Pattern,Brick Horizontal Pattern,Masonry,BrickCommon,Brick laid horizontally for patterned appearance.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Light_Blend_Running,Brick Light Blend Running,Masonry,BrickCommon,Brick in a light blend pattern for running bond.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Light_Blend_Soldier,Brick Light Blend Soldier,Masonry,BrickCommon,Brick in a light blend pattern for soldier bond.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Modular,Brick Modular,Masonry,BrickCommon,Standard-sized brick used in modular construction.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Norman,Brick Norman,Masonry,BrickCommon,Standard-sized brick with regular shape.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Pavers,Brick Pavers,Masonry,BrickPavers,Clay or concrete bricks used for paving.,Paving brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Sand_Lime,Brick Sand Lime,Masonry,BrickCommon,"Brick made from sand and lime, not fired.",Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Soldier_Course,Brick Soldier Course,Masonry,BrickCommon,Row of bricks set vertically in a wall.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Brick_Soldier_Course_Buff,Brick Soldier Course Buff,Masonry,BrickCommon,Buff-colored row of bricks set vertically.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Bronze,Bronze,Metal,NonFerrous,Alloy of copper and tin with various applications.,Architectural bronze
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Bronze_Architectural,Bronze Architectural,Metal,NonFerrous,Bronze used in architectural applications.,Architectural bronze
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#CFRP,CFRP,Plastic,Composite,Carbon Fiber Reinforced Polymer material.,Epoxy Carbon Fiber Composite
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#CMU_Lightweight,CMU Lightweight,Concrete,Standard,Lightweight concrete masonry unit.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#CMU_Perlite_Filled,CMU Perlite Filled,Concrete,Standard,Concrete masonry unit filled with perlite.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#CMU_Ribbed,CMU Ribbed,Concrete,Standard,Concrete masonry unit with ribbed texture.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#CMU_Split_Face,CMU Split Face,Concrete,Standard,Concrete masonry unit with split face finish.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Canvas,Canvas,Fabric,FabricCotton,Durable woven fabric made from cotton or linen.,Woven cotton
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Canvas_Blue_Stripe,Canvas Blue Stripe,Fabric,FabricCotton,Canvas fabric with blue stripes.,Woven cotton
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Berber_Color_Mix,Carpet Berber Color Mix,Fabric,Carpet,Berber-style carpet with mixed colors.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Berber_Grey_Pattern,Carpet Berber Grey Pattern,Fabric,Carpet,Berber-style carpet with grey pattern.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Berber_Grey_Stripes,Carpet Berber Grey Stripes,Fabric,Carpet,Berber-style carpet with grey stripes.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Berber_Light_Grey,Carpet Berber Light Grey,Fabric,Carpet,Berber-style carpet in light grey color.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Berber_Medium_Grey,Carpet Berber Medium Grey,Fabric,Carpet,Berber-style carpet in medium grey color.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Berber_Tan_Pattern,Carpet Berber Tan Pattern,Fabric,Carpet,Berber-style carpet with tan pattern.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Berber_Tan_Stripes,Carpet Berber Tan Stripes,Fabric,Carpet,Berber-style carpet with tan stripes.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Cut_Pile_Tan_Pattern,Carpet Cut Pile Tan Pattern,Fabric,Carpet,Cut pile carpet with tan pattern.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Loop_Pile_Tan,Carpet Loop Pile Tan,Fabric,Carpet,Loop pile carpet in tan color.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet_Loop_Pile_White,Carpet Loop Pile White,Fabric,Carpet,Loop pile carpet in white color.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Cavity_Fill,Cavity Fill,Insulation,Insulation,Insulating material filling wall cavities.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Ceiling_Tile_600_x_1200,Ceiling Tile 600 x 1200,Ceiling,AcousticCeilingTile,Ceiling tile with dimensions of 600 x 1200 mm.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Ceiling_Tile_600_x_600,Ceiling Tile 600 x 600,Ceiling,AcousticCeilingTile,Square ceiling tile with dimensions of 600 x 600 mm.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Cellulose_Fill,Cellulose Fill,Insulation,Insulation,Insulation material made from recycled paper.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Ceramic_Tile,Ceramic Tile,Tile,Tile,Tile made from fired clay.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Cherry,Cherry,Wood,HardWood,HardWood timber with reddish-brown color.,Black Cherry
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Cladding_Vertical_Ribbed,Cladding Vertical Ribbed,Metal,Aluminum,Ribbed cladding used for vertical applications.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Aerated,Concrete Aerated,Concrete,Lightweight,Lightweight concrete with air pockets.,Lightweight f'c=4.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Block_pattern_formwork,Concrete Block pattern formwork,Concrete,Standard,Concrete block with patterned surface.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Board_Formed,Concrete Board Formed,Concrete,Standard,Concrete with distinct board marks.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Broom_Finish,Concrete Broom Finish,Concrete,Standard,Concrete surface textured with a broom.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C12/15,Concrete C12/15,Concrete,Standard,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C12/15
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C16/20,Concrete C16/20,Concrete,Standard,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C16/20
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C20/25,Concrete C20/25,Concrete,Standard,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C20/25
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C25/30,Concrete C25/30,Concrete,Standard,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C25/30
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C30/37,Concrete C30/37,Concrete,Standard,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C30/37
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C35/45,Concrete C35/45,Concrete,Standard,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C35/45
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C40/50,Concrete C40/50,Concrete,Standard,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C40/50
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C45/55,Concrete C45/55,Concrete,HighStrength,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C45/55
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C50/60,Concrete C50/60,Concrete,HighStrength,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C50/60
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C55/67,Concrete C55/67,Concrete,HighStrength,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C55/67
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C60/75,Concrete C60/75,Concrete,HighStrength,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C60/75
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C70/85,Concrete C70/85,Concrete,HighStrength,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C70/85
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C80/95,Concrete C80/95,Concrete,HighStrength,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C80/95
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_C90/105,Concrete C90/105,Concrete,HighStrength,"Concrete with specified compressive strength. For more clarity check BS 5328, or BS EN 206 and BS 8500",EC2 Concrete C90/105
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Cast_In_Situ,Concrete Cast In Situ,Concrete,Standard,Concrete poured and cured on-site.,Concrete f'c=10 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Cast_in_Situ_Lightweight,Concrete Cast in Situ Lightweight,Concrete,Lightweight,Lightweight concrete poured in place.,Lightweight f'c=4.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace_Gray,Concrete CastinPlace Gray,Concrete,Standard,Concrete with a gray color.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C10,Concrete CastinPlace  C10,Concrete,Standard,Concrete with specified compressive strength.,Concrete f'c=10 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C15,Concrete CastinPlace  C15,Concrete,Standard,Concrete with specified compressive strength.,Concrete f'c=15 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C20,Concrete CastinPlace  C20,Concrete,Standard,Concrete with specified compressive strength.,Concrete f'c=20 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C25,Concrete CastinPlace  C25,Concrete,Standard,Concrete with specified compressive strength.,Concrete f'c=25 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C30,Concrete CastinPlace  C30,Concrete,Standard,Concrete with specified compressive strength.,Concrete f'c=30 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C35,Concrete CastinPlace  C35,Concrete,Standard,Concrete with specified compressive strength.,Concrete f'c=35 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C40,Concrete CastinPlace  C40,Concrete,Standard,Concrete with specified compressive strength.,Concrete f'c=40 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C45,Concrete CastinPlace  C45,Concrete,Standard,Concrete with specified compressive strength.,Concrete f'c=45 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C50,Concrete CastinPlace  C50,Concrete,HighStrength,Concrete with specified compressive strength.,Concrete f'c=50 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C60,Concrete CastinPlace  C60,Concrete,HighStrength,Concrete with specified compressive strength.,Concrete f'c=60 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_CastinPlace__C7_5,Concrete CastinPlace  C7_5,Concrete,Standard,Concrete with specified compressive strength.,Concrete f'c=7.5 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Exposed_Aggregate,Concrete Exposed Aggregate,Concrete,Standard,Concrete with decorative exposed aggregate finish.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_High_Strength,Concrete High Strength,Concrete,HighStrength,Concrete with enhanced compressive strength.,High Strength f'c=10.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Lightweight,Concrete Lightweight,Concrete,Lightweight,Lightweight concrete mixture.,Lightweight f'c=4.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Lightweight_30,Concrete Lightweight 30,Concrete,Lightweight,Lightweight concrete with specified strength.,Lightweight f'c=30 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Lightweight_40,Concrete Lightweight 40,Concrete,Lightweight,Lightweight concrete with specified strength.,Lightweight f'c=40 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Lightweight_45,Concrete Lightweight 45,Concrete,Lightweight,Lightweight concrete with specified strength.,Lightweight f'c=45 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Lightweight_4_ksi,Concrete Lightweight 4 ksi,Concrete,Lightweight,Lightweight concrete with specified strength.,Lightweight f'c=4.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Lightweight_50,Concrete Lightweight 50,Concrete,Lightweight,Lightweight concrete with specified strength.,Lightweight f'c=50 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Masonry_Floor_Block,Concrete Masonry Floor Block,Concrete,Standard,Concrete block used in flooring applications.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Masonry_Units,Concrete Masonry Units,Concrete,Standard,Precast concrete blocks used in construction.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Normal_Weight_3_ksi,Concrete Normal Weight 3 ksi,Concrete,Standard,Standard weight concrete with specified strength.,Concrete f'c=3.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Normal_Weight_4_ksi,Concrete Normal Weight 4 ksi,Concrete,Standard,Standard weight concrete with specified strength.,Concrete f'c=4.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Normal_Weight_5_ksi,Concrete Normal Weight 5 ksi,Concrete,Standard,Standard weight concrete with specified strength.,Concrete f'c=5.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Plywood_formwork,Concrete Plywood formwork,Concrete,Standard,Concrete cast against plywood forms.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Precast,Concrete Precast,Concrete,Standard,Concrete components cast off-site.,Concrete f'c=5.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Precast_Panels,Concrete Precast Panels,Concrete,Standard,Precast concrete panels used for construction.,Concrete f'c=5.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Precast_Smooth_Light_Grey,Concrete Precast Smooth Light Grey,Concrete,Standard,Precast concrete panels with smooth light grey finish.,Concrete f'c=5.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Precast_Smooth_Light_Grey_Wall_Height,Concrete Precast Smooth Light Grey Wall Height,Concrete,Standard,"Precast concrete panels with smooth light grey finish, varying wall heights.",Concrete f'c=5.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Sand/Cement_Screed,Concrete Sand/Cement Screed,Concrete,Standard,Mixture of sand and cement used as a base layer.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete_Walkway,Concrete Walkway,Concrete,Standard,Concrete path or walkway.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Copper,Copper,Metal,NonFerrous,Durable metal used in electrical systems.,Oxygen free copper
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Copper_Patina,Copper Patina,Metal,NonFerrous,Copper with patina finish for weathered appearance.,Oxygen free copper
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Cork_Tiles_as_Individual,Cork Tiles,Flooring,CorkTiles,Flooring material made from cork.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Door_Glazing,Door Glazing,Generic,Glass,Glass used in door panels or windows.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Douglas_Fir,Douglas Fir,Wood,SoftWood,Strong softwood with a reddish-brown hue.,Douglas Fir
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#EIFS_Exterior_Insulation,EIFS Exterior Insulation,Insulation,Insulation,Exterior insulation and finishing system for buildings.,Expanded Polystyrene based
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Epoxy_Resin,Epoxy Resin,Plastic,Thermoset,Thermosetting polymer often used as a sealant or adhesive.,"Cast epoxy, unfilled. average values"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Exposed_Masonry,Exposed Masonry,Masonry,BrickCommon,Masonry material left exposed for aesthetic purpose.,Common brick
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Fabric_as_Individual,Fabric,Fabric,Carpet,Cloth material made from fibers.,Woven cotton
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Fiberglass_Batt,Fiberglass Batt,Insulation,Insulation,Insulation material made from fiberglass fibers.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Fieldstone,Fieldstone,Generic,Stone,Natural stones used for rustic wall construction.,Limestone
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#GFRC,GFRC,Concrete,FiberReinforced,Glass Fiber Reinforced Concrete.,"Glass Fiber Reinforced Concrete, 5% fibers"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#GFRP,GFRP,Plastic,Composite,Glass Fiber Reinforced Polymer material.,Epoxy Glass Fiber Composite
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Block,Glass Block,Generic,Glass,Hollow glass unit used as a building material.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Brick,Glass Brick,Generic,Glass,Brick made of translucent or transparent glass.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Bronze_Glazing,Glass Bronze Glazing,Generic,Glass,Glass with bronze-tinted glazing.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Bronze_Glazing_Low_E,Glass Bronze Glazing Low E,Generic,Glass,Energy-efficient glass with low emissivity and bronze tint.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Cast_Clear,Glass Cast Clear,Generic,Glass,Transparent glass produced by casting.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Cast_Gray,Glass Cast Gray,Generic,Glass,Glass with gray tint produced by casting.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Clear_Glazing,Glass Clear Glazing,Generic,Glass,Clear glass used in glazing applications.,Glass - Soda Lime
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Clear_Glazing_Low_E,Glass Clear Glazing Low E,Generic,Glass,Energy-efficient transparent glass with low emissivity.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Clear_Glazing_Tempered,Glass Clear Glazing Tempered,Generic,Glass,Transparent glass that is tempered for strength.,Glass - Tempered
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Fiber_Reinforced_Gypsum,Glass Fiber Reinforced Gypsum,Plaster,Plaster,Gypsum material reinforced with glass fibers.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Frosted,Glass Frosted,Generic,Glass,Glass treated to appear frosted for privacy.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Green,Glass Green,Generic,Glass,Glass with green tint.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_Matte,Glass Matte,Generic,Glass,Glass treated to have a matte appearance.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glass_White_High_Luminance,Glass White High Luminance,Generic,Glass,White glass with high luminance.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glue_Laminated_Timber,Glue Laminated Timber,Wood,EngineeredWood,Engineered wood product made by gluing layers of wood together. For more details see European standard BS EN 14080:2013,SoftWood laminated veneer lumber
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glulam_24c,Glulam 24c,Wood,EngineeredWood,Glue-laminated timber with specific characteristics. For more details see European standard BS EN 14080:2013,Glue laminated timber GL24c  EN 1194
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glulam_24h,Glulam 24h,Wood,EngineeredWood,Glue-laminated timber with specific characteristics. For more details see European standard BS EN 14080:2013,Glue laminated timber GL24h  EN 1194
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glulam_28c,Glulam 28c,Wood,EngineeredWood,Glue-laminated timber with specific characteristics. For more details see European standard BS EN 14080:2013,Glue laminated timber GL28c  EN 1194
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glulam_28h,Glulam 28h,Wood,EngineeredWood,Glue-laminated timber with specific characteristics. For more details see European standard BS EN 14080:2013,Glue laminated timber GL28h  EN 1194
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glulam_32c,Glulam 32c,Wood,EngineeredWood,Glue-laminated timber with specific characteristics. For more details see European standard BS EN 14080:2013,Glue laminated timber GL32c  EN 1194
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glulam_32h,Glulam 32h,Wood,EngineeredWood,Glue-laminated timber with specific characteristics. For more details see European standard BS EN 14080:2013,Glue laminated timber GL32h  EN 1194
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glulam_36c,Glulam 36c,Wood,EngineeredWood,Glue-laminated timber with specific characteristics. For more details see European standard BS EN 14080:2013,Glue laminated timber GL36c  EN 1194
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Glulam_36h,Glulam 36h,Wood,EngineeredWood,Glue-laminated timber with specific characteristics. For more details see European standard BS EN 14080:2013,Glue laminated timber GL36h  EN 1194
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Gold,Gold,Metal,NonFerrous,Precious metal used in various applications.,Fine Gold 99.95%
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Granite_Cut_Polished,Granite Cut Polished,Generic,Stone,Polished cut granite material.,"Granite, average properties"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Granite_Cut_Rough,Granite Cut Rough,Generic,Stone,Rough-cut granite material.,"Granite, average properties"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Gypsum_Wall_Board,Gypsum Wall Board,Miscellaneous,GypsumWallBoard,Drywall or plasterboard made from gypsum.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Iron_Cast,Iron Cast,Metal,Iron,Iron that is cast into specific shapes or forms.,Cast Iron
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Iron_Ductile,Iron Ductile,Metal,Iron,Strong and flexible form of iron.,Ductile Cast Iron
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Iron_Wrought,Iron Wrought,Metal,Steel,Iron that is worked into specific shapes by forging.,"Iron, Wrought"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Jarrah,Jarrah,Wood,HardWood,Durable hardwood with a deep red color.,Jarrah
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Kerto_S_LVL,Kerto S LVL,Wood,EngineeredWood,Laminated veneer lumber known for its strength and stiffness.,Kerto-S  beam 21-90 mm EC5
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Laminate_Black,Laminate Black,Plastic,Thermoset,Black-colored laminated material.,Phenolic Resin
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Laminate_Blue_Matte,Laminate Blue Matte,Plastic,Thermoset,Matte finish blue laminated material.,Phenolic Resin
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Laminate_Ivory_Matte,Laminate Ivory Matte,Plastic,Thermoset,Matte finish ivory laminated material.,Phenolic Resin
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Laminate_Linen_Matte,Laminate Linen Matte,Plastic,Thermoset,Matte finish linen-patterned laminated material.,Phenolic Resin
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Laminate_Navy,Laminate Navy,Plastic,Thermoset,Navy-colored laminated material.,Phenolic Resin
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Laminate_Red_Matte,Laminate Red Matte,Plastic,Thermoset,Matte finish red laminated material.,Phenolic Resin
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Laminate_White,Laminate White,Plastic,Thermoset,White laminated material.,Phenolic Resin
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Laminate_White_Matte,Laminate White Matte,Plastic,Thermoset,Matte finish white laminated material.,Phenolic Resin
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Laminated_Veneer_Lumber,Laminated Veneer Lumber,Wood,EngineeredWood,Engineered wood product made from thin wood veneers.,Kerto-S  beam 21-90 mm EC5
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Lauan_Meranti,Lauan Meranti,Wood,HardWood,Tropical hardwood with a reddish-brown hue.,Red Meranti
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Lead,Lead,Metal,NonFerrous,Heavy metal with various applications.,Pure lead
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Leather_Dark_Brown,Leather Dark Brown,Leather,Leather,Tanned animal hide in dark brown color.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Leather_weathered,Leather weathered,Leather,Leather,Aged and worn leather material.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Limestone,Limestone,Generic,Stone,Sedimentary rock often used in construction.,Limestone
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Linen_Beige,Linen Beige,FabricOrTextile,FabricCotton,Beige-colored woven fabric made from flax fibers.,Woven cotton
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Linen_White,Linen White,FabricOrTextile,FabricCotton,White-colored woven fabric made from flax fibers.,Woven cotton
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#MDF_Medium_Density_Fiberboard,MDF Medium Density Fiberboard,Wood,EngineeredWood,Engineered wood product made from wood fibers and resin.,Grade H-1
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Magnesium,Magnesium,Metal,NonFerrous,Lightweight metal with various applications.,Rolled magnesium
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Mahogany,Mahogany,Wood,HardWood,High-quality hardwood with a reddish-brown color.,Honduras Mahogony
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Maple,Maple,Wood,HardWood,HardWood known for its fine grain and light color.,Sugar Maple
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Maple__Glossy,Maple  Glossy,Wood,HardWood,"Maple wood with a polished, glossy finish.",Sugar Maple
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Maple__Semigloss,Maple  Semigloss,Wood,HardWood,Maple wood with a semi-gloss finish.,Sugar Maple
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Marble,Marble,Generic,Stone,Metamorphic rock used for decorative purposes.,Marble
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Deck,Metal Deck,Metal,Steel,Corrugated steel sheets used for floor and roof decks.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Firring,Metal Firring,Metal,Steel,Metallic framing or support structure.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Furring,Metal Furring,Metal,Steel,Thin metal strips used for attaching materials.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Paint_Finish_White_Matte,Metal Paint Finish White Matte,Metal,Steel,White matte paint finish on metal.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Panel,Metal Panel,Metal,Steel,Metal sheet used for wall or roofing panels.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Powder_Coated_White,Metal Powder Coated White,Metal,Steel,Metal coated with white powder for finish.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Roofing,Metal Roofing,Metal,Aluminum,Roofing material made of metal sheets or tiles.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Sheet/Flashing,Metal Sheet/Flashing,Metal,Aluminum,Thin metal sheet used for flashing applications.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Sheeting_Rails,Metal Sheeting Rails,Metal,Steel,Metal rails used for various sheeting applications.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Stud_Layer,Metal Stud Layer,Metal,Steel,Metal framework used in walls and ceilings.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal_Trim,Metal Trim,Metal,Aluminum,Metal used for decorative or protective purposes.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Mirror,Mirror,Generic,Glass,Reflective surface made of glass with a reflective coating.,Soda Lime Glass
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Nitrogen,Nitrogen,Gas,Gas,Inert gas used to enhance thermal insulation in windows.,"Nitrogen, properties at atmospheric pressure"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Nylon_6,Nylon 6,Plastic,Thermoplastic,Synthetic polymer used in various applications.,Nylon 6
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Oak_Flooring_Espresso,Oak Flooring Espresso,Wood,HardWood,Oak wood flooring with an espresso-colored finish.,Northern Red Oak
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Oak_Red,Oak Red,Wood,HardWood,Oak wood with a reddish hue and distinctive grain.,Northern Red Oak
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Oak_White,Oak White,Wood,HardWood,Oak wood with a light color and prominent grain.,White Oak
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Oriented_Strand_Board,Oriented Strand Board,Wood,EngineeredWood,Engineered wood product made from compressed wood strands.,Aspen OSB
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Oxygen,Oxygen,Gas,Gas,Gas found in the atmosphere.,"Oxygen, properties at atmospheric pressure"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#PVC_Flexible,PVC Flexible,Plastic,Thermoplastic,Flexible form of PVC used in various applications.,Flexible PVC
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Palladium,Palladium,Metal,NonFerrous,Precious metal used in various applications.,Palladium
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Particleboard,Particleboard,Wood,EngineeredWood,Wood composite material made from wood particles.,Grade H-1
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Perlite,Perlite,Insulation,Insulation,Lightweight aggregate used in construction.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Phenolic_Resin,Phenolic Resin,Plastic,Thermoset,Synthetic resin used for insulation or coatings.,Phenolic Resin
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Pine,Pine,Wood,SoftWood,SoftWood with a pale color and even grain.,Shortleaf Pine
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Pine_Radiata,Pine Radiata,Wood,SoftWood,SoftWood known for its straight grain and uniform texture.,Radiata Pine
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Pine_Scots,Pine Scots,Wood,SoftWood,Common softwood with a light color and texture.,Scots Pine
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Pine_Southern,Pine Southern,Wood,SoftWood,"SoftWood with a fine, even texture.",Shortleaf Pine
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Plastic_Opaque_Black,Plastic Opaque Black,Plastic,Thermoplastic,Opaque black-colored plastic material.,Molded HDPE
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Plastic_Opaque_White,Plastic Opaque White,Plastic,Thermoplastic,Opaque white-colored plastic material.,Molded HDPE
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Plastic_Transparent,Plastic Transparent,Plastic,Thermoplastic,Transparent plastic material.,"Polymethylmethacrylate, Molding and Extrusion"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Platinum,Platinum,Metal,NonFerrous,Precious metal used in various applications.,Platinum
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Plywood_Sheathing,Plywood Sheathing,Generic,EngineeredWood,Plywood panels used as wall and roof sheathing.,Southern pine plywood
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polycarbonate_Clear,Polycarbonate Clear,Plastic,Thermoplastic,Transparent and durable synthetic material.,"Unfilled Polycarbonate, molded"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polyethylene_High_Density,Polyethylene High Density,Plastic,Thermoplastic,High-density polymer material.,Molded HDPE
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polyethylene_Low_Density,Polyethylene Low Density,Plastic,Thermoplastic,Low-density polymer material.,Molded LDPE
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polyisocyanate,Polyisocyanate,Plastic,Thermoset,Chemical compound used in foam insulation.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polyisocyanurate,Polyisocyanurate,Plastic,Thermoset,Insulation material containing isocyanurate.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polypropylene,Polypropylene,Plastic,Thermoplastic,Thermoplastic polymer used in various applications.,Plastic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polystyrene_Expanded,Polystyrene Expanded,Plastic,Expanded,Lightweight plastic used for insulation.,Expanded polystyrene foam
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polystyrene_High_Impact,Polystyrene High Impact,Plastic,Thermoplastic,Impact-resistant plastic material.,High impact polystyrene
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polytetrafluoroethylene,Polytetrafluoroethylene,Plastic,Thermoplastic,Nonstick synthetic material known as Teflon.,"Molded PTFE, Polytetrafluoroethylene"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polyurethane_Foam,Polyurethane Foam,Plastic,Thermoplastic,Foam insulation material.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Polyvinyl_Chloride_Rigid,Polyvinyl Chloride Rigid,Plastic,Thermoplastic,Rigid form of PVC used in construction.,"Rigid PVC, molded"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Poplar,Poplar,Wood,HardWood,Lightweight hardwood often used for furniture.,Yellow Poplar
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Porcelain_Ivory,Porcelain Ivory,Ceramic,Ceramic,Ceramic material fired at high temperatures.,"Porcelain, ordinary"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Porcelain_Linen,Porcelain Linen,Ceramic,Ceramic,Ceramic material with a linen-like texture.,"Porcelain, ordinary"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Quartz_Countertop_White,Quartz Countertop White,Plastic,Thermoplastic,White-colored quartz material for countertops.,"Cast acrylic resin, mineral filled"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rebar_ASTM_A615_Grade_40,Rebar ASTM A615 Grade 40,Metal,Steel,Reinforcing bar with specific characteristics.,"ASTM A615 billet steel, Fy 40ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rebar_ASTM_A615_Grade_60,Rebar ASTM A615 Grade 60,Metal,Steel,Reinforcing bar with specific characteristics.,"ASTM A615 billet steel, Fy 60ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rebar_ASTM_A615_Grade_75,Rebar ASTM A615 Grade 75,Metal,Steel,Reinforcing bar with specific characteristics.,"ASTM A615 billet steel, Fy 75ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rebar_ASTM_A706_Grade_60,Rebar ASTM A706 Grade 60,Metal,Steel,Reinforcing bar with specific characteristics.,"ASTM A615 billet steel, Fy 60ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Redwood,Redwood,Wood,SoftWood,Durable softwood with a reddish hue.,California Redwood
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Render_Beige_Smooth,Render Beige Smooth,Plaster,Plaster,Smooth beige render used for finishing surfaces.,Cement Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Render_Beige_Textured,Render Beige Textured,Plaster,Plaster,Textured beige render used for finishing surfaces.,Cement Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Render_Tan_Textured,Render Tan Textured,Plaster,Plaster,Textured tan render used for finishing surfaces.,Cement Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rigid_insulation,Rigid insulation,Plastic,Expanded,Insulation material with high thermal resistance.,Expanded polystyrene foam
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rock_Wool,Rock Wool,Insulation,Insulation,Insulation material made from spun rock fibers.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Roofing,Roofing,Asphalt,AsphaltShingle,Material used for roofing applications.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Roofing_Metal,Roofing Metal,Metal,Aluminum,Metal used in roofing applications.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Roofing_Slate,Roofing Slate,Generic,Slate,Natural stone used for roofing applications.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Roofing_Standing_Seam,Roofing Standing Seam,Metal,Aluminum,Roofing material with vertical seams.,"Aluminum magnesium silicon alloy, 6061"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Roofing_Tile,Roofing Tile,Tile,Tile,Tile used for roofing purposes.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rubber_Black,Rubber Black,Plastic,Elastomer,Black-colored elastic material.,Natural rubber
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rubber_Butyl,Rubber Butyl,Plastic,Elastomer,Butyl rubber material used for sealing.,Butyl rubber
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rubber_Natural,Rubber Natural,Plastic,Elastomer,Natural rubber material with elasticity.,Natural rubber
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rubber_Nitrile,Rubber Nitrile,Plastic,Elastomer,Synthetic rubber material resistant to oil.,Nitrile rubber
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Rubble,Rubble,Generic,Stone,Irregularly shaped stones used for wall construction.,Limestone
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Semirigid_insulation,Semirigid insulation,Insulation,Insulation,Insulation material with intermediate rigidity.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Siding_Clapboard,Siding Clapboard,Wood,SoftWood,Type of wood siding often used in residential construction.,Sitka Spruce
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Silver,Silver,Metal,NonFerrous,Precious metal used in various applications.,Silver
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Slab_Screed,Slab Screed,Concrete,Standard,Layer of material used to level a surface.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#SoftWood_Lumber,SoftWood Lumber,Wood,SoftWood,"Lumber from coniferous trees, typically softer wood.",Default softwood - Spruce-Pine-Fir
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Softwood_Finish,SoftWood Finish,Wood,SoftWood,Wood with a finish often used in construction.,Eastern White Pine
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Solid_Surface_Countertop,Solid Surface Countertop,Plastic,Thermoplastic,Synthetic countertop material.,"Cast acrylic resin, mineral filled"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Spruce,Spruce,Wood,SoftWood,Lightweight softwood with a light color.,Sitka Spruce
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Stainless_Steel_AISI_304,Stainless Steel AISI 304,Metal,Steel,Specific type of stainless steel with properties.,"Stainless Steel, 18/8"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Stainless_Steel_Brushed,Stainless Steel Brushed,Metal,Steel,Stainless steel with brushed finish.,"Stainless Steel, 18/8"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Stainless_Steel_Polished,Stainless Steel Polished,Metal,Steel,Stainless steel with polished finish.,"Stainless Steel, 18/8"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_43245,Steel 43245,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 245 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_43265,Steel 43265,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 265 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_43275,Steel 43275,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 275 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_43355,Steel 43355,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 355 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_45345,Steel 45345,Metal,Steel,Specific type of steel with defined properties.,High Strength steel Fy 345 MPa
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_50325,Steel 50325,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 325 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_50340,Steel 50340,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 340 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_50355,Steel 50355,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 355 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_51275,Steel 51275,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 275 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_55415,Steel 55415,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 415 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_55430,Steel 55430,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 430 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_55450,Steel 55450,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 450 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_64460,Steel 64460,Metal,Steel,Specific type of steel with defined characteristics.,"Steel, Fy 460 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_AISI_1015,Steel AISI 1015,Metal,Steel,Specific type of steel with defined characteristics.,AISI 1015 steel
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_AISI_1022,Steel AISI 1022,Metal,Steel,Specific type of steel with defined characteristics.,AISI 1022 steel
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A242,Steel ASTM A242,Metal,Steel,Specific type of steel with defined characteristics.,"ASTM A242 steel, Fy 42 ksi, corrosion resisitant"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A36,Steel ASTM A36,Metal,Steel,Specific type of steel with defined characteristics.,"ASTM A36 steel, Fy 36 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A500_Grade_B_Rectangular_and_Square,Steel ASTM A500 Grade B Rectangular and Square,Metal,Steel,Steel with specific shape and properties.,"ASTM A500 steel, Grade B round, Fy 42 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A500_Grade_B_Round,Steel ASTM A500 Grade B Round,Metal,Steel,Steel with specific shape and properties.,"ASTM A500 steel, Grade B rectangular, Fy 46 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A500_Grade_C_Rectangular_and_Square,Steel ASTM A500 Grade C Rectangular and Square,Metal,Steel,Steel with specific shape and properties.,"ASTM A500 steel, Grade C round, Fy 46 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A500_Grade_C_Round,Steel ASTM A500 Grade C Round,Metal,Steel,Steel with specific shape and properties.,"ASTM A500 steel, Grade C rectangular, Fy 50 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A53,Steel ASTM A53,Metal,Steel,Specific type of steel with defined characteristics.,"ASTM A53 steel, Fy 35 ksi Steel pipes"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A572,Steel ASTM A572,Metal,Steel,Specific type of steel with defined characteristics.,"ASTM A572 steel, Fy 50 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A913,Steel ASTM A913,Metal,Steel,Specific type of steel with defined characteristics.,"ASTM A913 steel, Fy 50 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_ASTM_A992,Steel ASTM A992,Metal,Steel,Specific type of steel with defined characteristics.,"ASTM A992 steel, Fy 50 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Chrome_Plated,Steel Chrome Plated,Metal,Steel,Steel plated with chromium for a shiny finish.,"ASTM A36 steel, Fy 36 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Galvanized,Steel Galvanized,Metal,Steel,Steel coated with zinc to prevent rusting.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_High_Grade,Steel High Grade,Metal,Steel,Steel with high quality and performance standards.,"High Strength steel, Fy 290 MPa"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Paint_Finish_Blue,Steel Paint Finish Blue,Metal,Steel,Steel with blue paint finish.,"ASTM A36 steel, Fy 36 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Paint_Finish_Dark_Gray,Steel Paint Finish Dark Gray,Metal,Steel,Steel with dark gray paint finish.,"ASTM A36 steel, Fy 36 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Paint_Finish_Dark_Gray_Matte,Steel Paint Finish Dark Gray Matte,Metal,Steel,Steel with matte dark gray paint finish.,"ASTM A36 steel, Fy 36 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Paint_Finish_Ivory_Glossy,Steel Paint Finish Ivory Glossy,Metal,Steel,Steel with glossy ivory paint finish.,"ASTM A36 steel, Fy 36 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Paint_Finish_Ivory_Matte,Steel Paint Finish Ivory Matte,Metal,Steel,Steel with matte ivory paint finish.,"ASTM A36 steel, Fy 36 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Paint_Finish_Red,Steel Paint Finish Red,Metal,Steel,Steel with red paint finish.,"ASTM A36 steel, Fy 36 ksi"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Polished,Steel Polished,Metal,Steel,Steel with a polished and smooth surface.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_Purlins,Steel Purlins,Metal,Steel,Horizontal members used in roof framing.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_S_235,Steel S 235,Metal,Steel,Specific type of structural steel with defined properties.,"Steel, S235 (EN 10025-2)"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_S_275,Steel S 275,Metal,Steel,Specific type of structural steel with defined properties.,"Steel, S275 (EN 10025-2)"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_S_355,Steel S 355,Metal,Steel,Specific type of structural steel with defined properties.,"Steel, S355 (EN 10025-2)"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel_S_460,Steel S 460,Metal,Steel,Specific type of structural steel with defined properties.,"Steel, S460 (EN 10025-6)"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Stone_Natural_Soldier,Stone Natural Soldier,Generic,Stone,Natural stone used in soldier course pattern.,"Granite, average properties"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Structure_Precast_Concrete_Beams,Structure Precast Concrete Beams,Concrete,Standard,Prefabricated concrete beams for structures.,Concrete f'c=5.0 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Structure_Wood_Truss_Joist/Rafter_Layer,Structure Wood Truss Joist/Rafter Layer,Wood,SoftWood,Wooden structural element supporting a roof.,Default softwood - Spruce-Pine-Fir
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Teak,Teak,Wood,HardWood,HardWood known for its durability and resistance to moisture.,Teak
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Terrazzo_as_Individual,Terrazzo,Concrete,Standard,Composite material consisting of chips set in concrete.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Tile_Mosaic_Gray,Tile Mosaic Gray,Tile,Tile,Gray-colored mosaic tile material.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Tile_Porcelain_4in,Tile Porcelain 4in,Tile,Tile,Porcelain tile with a 4-inch size.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Tile_Porcelain_6in,Tile Porcelain 6in,Tile,Tile,Porcelain tile with a 6-inch size.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Tile_Quarry,Tile Quarry,Tile,Tile,Tile made from quarried stone.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Tile_Stone_and_Ceramic_mix,Tile Stone and Ceramic mix,Tile,Tile,Tile composed of stone and ceramic materials.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Tile_Structural,Tile Structural,Tile,Tile,Tile used for structural purposes.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Tiles_15_x_15,Tiles 15 x 15,Concrete,Standard,Square tiles with dimensions of 15 x 15 inches.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Tiles_25_x_25,Tiles 25 x 25,Concrete,Standard,Square tiles with dimensions of 25 x 25 inches.,Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Timber_C16,Timber C16,Wood,SoftWood,SoftWood timber graded for strength and stability.,Strength Class C16 Timber
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Timber_C24,Timber C24,Wood,SoftWood,Higher grade softwood timber known for durability.,Strength Class C24 Timber
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Titanium,Titanium,Metal,NonFerrous,Lightweight and strong metal with various applications.,Pure titanium
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Travertine,Travertine,Generic,Stone,Form of limestone with unique pattern and colors.,Limestone
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Ultralam_R_LVL,Ultralam R LVL,Wood,EngineeredWood,Ultralam Laminated Veneer Lumber with specific features.,Ultralam R beam orientation  EN 14374
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Ultralam_X_LVL,Ultralam X LVL,Wood,EngineeredWood,Ultralam Laminated Veneer Lumber with specific features.,Ultralam X beam orientation  EN 14374
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Vermiculite_Loose,Vermiculite Loose,Insulation,Insulation,Insulating material made from expanded minerals.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Vinyl_Composition_Tile_as_Individual,Vinyl Composition Tile,Flooring,VinylCompositionTile,Flooring material made of vinyl chips in composite tile.,Vinyl sheet or tile
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Vinyl_Sheet_Flooring_as_Individual,Vinyl Sheet Flooring,Flooring,VinylSheetFlooring,Flooring material made of vinyl in sheet form.,Vinyl sheet or tile
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wall_Texture_Orange_Peel,Wall Texture Orange Peel,Plaster,Plaster,Textured finish resembling an orange peel.,Cement Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wall_Texture_Stucco,Wall Texture Stucco,Plaster,Plaster,Decorative plaster finish for exterior walls.,Cement Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wall_Texture_Stucco_Coarse,Wall Texture Stucco Coarse,Plaster,Plaster,Coarse-textured stucco finish for walls.,Cement Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wall_Texture_Stucco_Knockdown,Wall Texture Stucco Knockdown,Plaster,Plaster,Stucco with a textured finish created by knocking down peaks.,Cement Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wall_Texture_Stucco_Stipple,Wall Texture Stucco Stipple,Plaster,Plaster,Stucco finish with a stippled texture.,Cement Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Walnut,Walnut,Wood,HardWood,HardWood known for its dark color and fine grain.,Black Walnut
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Water,Water,Liquid,Liquid,Essential fluid for various construction purposes.,"Water, properties @20C"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wood_Flooring,Wood Flooring,Wood,HardWood,Wood planks used as a durable floor covering.,Northern Red Oak
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wood_Planks,Wood Planks,Wood,HardWood,"Long, flat pieces of wood used for various purposes.",Default hardwood -Red Oak
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wood_Shake,Wood Shake,Wood,SoftWood,Wooden shingles used for roofing.,Sitka Spruce
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wood_Sheathing_Chipboard,Wood Sheathing Chipboard,Wood,EngineeredWood,Wood-based panel often used as wall sheathing.,Grade H-1
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Wood_as_Individual,Wood,Wood,SoftWood,The fibrous structural tissue found in tree stems.,Shortleaf Pine
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Zinc,Zinc,Metal,NonFerrous,Metal with anti-corrosion properties.,Typical zinc alloy
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Dampproofing,Dampproofing,Miscellaneous,Dampproofing,Material used to prevent moisture penetration.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Earth,Earth,Miscellaneous,Earth," Represents earth materials used for construction, landscaping, and earthworks.                    ",Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Earth,Earth,Miscellaneous,Earth,Soil and natural material from the ground.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Gravel,Gravel,Miscellaneous,Gravel, Represents gravel materials commonly used in construction and road-building projects.             ,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Gravel,Gravel,Miscellaneous,Gravel,Small rock fragments used in various applications.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Paper,Paper,Miscellaneous,Paper," Represents paper materials used in various construction applications, including moisture barriers.",Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Paper,Paper,Miscellaneous,Paper,Material made from processed plant fibers.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Sand,Sand,Miscellaneous,Sand, Represents sand materials commonly used as a key ingredient in concrete and mortar mixes.         ,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Sand,Sand,Miscellaneous,Sand,Granular material used in concrete and mortar.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Slate,Slate,Generic,Slate,Fine-grained metamorphic rock used for roofing.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Stone,Stone,Generic,Stone," Represents stone materials known for their durability, natural aesthetics, and structural strength.","Granite, average properties"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Stone,Stone,Generic,Stone,General term for natural construction materials.,"Granite, average properties"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Stone,Stone,Generic,Stone,Natural rock materials used in construction and architectural applications,"Granite, average properties"
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet,Carpet,Fabric,Carpet,Textile flooring material made of woven fibers.,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Carpet,Carpet,Fabric,Carpet,Textile floor covering materials providing comfort and acoustic properties,Basic structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Plaster,Plaster,Plaster,Plaster, Represents plaster materials used for wall finishing and decorative treatments.                     ,Gypsum Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Plaster,Plaster,Plaster,Plaster,Material used for coating walls and ceilings.,Gypsum Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Plaster,Plaster,Plaster,Plaster,Coating materials applied to walls and ceilings for finishing and protection,Gypsum Plaster
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Masonry,Masonry,Concrete,Standard," Represents masonry materials, used for building walls, structures, and decorative elements.       ",Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Masonry,Masonry,Concrete,Standard,"Construction using stones, bricks, or concrete.",Default Concrete f'c=3.5 ksi
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel,Steel,Metal,Steel,General term for various steel materials.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Steel,Steel,Metal,Steel,"Represents steel materials, widely used in construction for their strength, versatility, and critical role in structural engineering.",Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal,Metal,Metal,Steel,General term for various metallic materials.,Metal structural asset.
+http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Metal,Metal,Metal,Steel,"Represents metal materials, valued for their strength, durability, and diverse applications used in construction.",Metal structural asset.

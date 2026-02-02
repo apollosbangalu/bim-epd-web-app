@@ -1,12 +1,14 @@
 """
-Thesaurus Navigator Agent Module
+Thesaurus Navigator Agent Module - ENHANCED WITH STRICT VALIDATION
 Second agent in the 5-step workflow
 
 Navigates SKOS thesaurus to find semantic concept mappings between
 BIM categories and EPD concepts.
 
-Input: BIM material data with categories
+Input: BIM material data with thesaurus taxonomy URIs
 Output: List of concept mappings with confidence scores
+
+CRITICAL ENHANCEMENT: Now validates that URIs are thesaurus taxonomy URIs
 """
 import logging
 from typing import Dict, Any, List
@@ -27,6 +29,8 @@ class ThesaurusNavigatorAgent(BaseAgent):
     Agent for navigating thesaurus concept mappings
     
     Step 2 of 5: Find semantic mappings from BIM categories to EPD concepts
+    
+    ENHANCED: Now strictly validates thesaurus taxonomy URIs
     """
     
     def __init__(self, llm_client: BaseLLMClient, sparql_client: SPARQLClient):
@@ -74,7 +78,7 @@ Return ONLY JSON, no additional text.
         Navigate thesaurus mappings
         
         Args:
-            input_data: BIM material data with category URIs
+            input_data: BIM material data with thesaurus taxonomy URIs
             
         Returns:
             Concept mappings with confidence scores
@@ -85,17 +89,60 @@ Return ONLY JSON, no additional text.
         
         raw_data = input_data["raw_data"]
         
-        # Extract category URIs - try thesaurus URIs first, fallback to ontology URIs
-        primary_cat = raw_data.get("primary_category_thesaurus_uri") or raw_data.get("primary_category_uri")
-        secondary_cat = raw_data.get("secondary_category_thesaurus_uri") or raw_data.get("secondary_category_uri")
+        # ✅ STRICT: Only use thesaurus taxonomy URIs (NOT ontology URIs)
+        primary_cat = raw_data.get("primary_category_thesaurus_uri")
+        secondary_cat = raw_data.get("secondary_category_thesaurus_uri")
         
+        # ✅ LOG FOR DEBUGGING
+        self.logger.info(f"Thesaurus Navigator received:")
+        self.logger.info(f"  - Primary thesaurus URI: {primary_cat}")
+        self.logger.info(f"  - Secondary thesaurus URI: {secondary_cat}")
+        
+        # ✅ VALIDATE: Primary URI must exist
         if not primary_cat:
+            # Check if we have ontology URI (indicates Step 1 transformation failed)
+            primary_ontology = raw_data.get("primary_category_uri")
+            
+            if primary_ontology:
+                error_msg = (
+                    f"No primary thesaurus URI found. "
+                    f"BIM extraction failed to transform ontology URI to thesaurus URI. "
+                    f"Ontology URI present: {primary_ontology} "
+                    f"This indicates the owl:equivalentClass mapping is missing or "
+                    f"the thesaurus client was not properly initialized in Step 1."
+                )
+            else:
+                error_msg = "No primary category URI found (neither thesaurus nor ontology)"
+            
+            self.logger.error(error_msg)
             return self.create_result(
                 success=False,
-                error="No primary category URI found"
+                error=error_msg
             )
         
-        self.logger.info(f"Navigating thesaurus for categories: {primary_cat}")
+        # ✅ VALIDATE: URI must be from thesaurus taxonomy namespace
+        if not self._is_thesaurus_taxonomy_uri(primary_cat):
+            error_msg = (
+                f"Invalid primary URI: Expected thesaurus taxonomy URI "
+                f"(http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#...), "
+                f"but got: {primary_cat}. "
+                f"This indicates Step 1 failed to transform BIM ontology URI to thesaurus URI."
+            )
+            self.logger.error(error_msg)
+            return self.create_result(
+                success=False,
+                error=error_msg
+            )
+        
+        # ✅ VALIDATE: Secondary URI (if present) must also be thesaurus taxonomy URI
+        if secondary_cat and not self._is_thesaurus_taxonomy_uri(secondary_cat):
+            self.logger.warning(
+                f"Invalid secondary URI (ignoring): {secondary_cat}. "
+                f"Expected thesaurus taxonomy URI."
+            )
+            secondary_cat = None  # Ignore invalid secondary URI
+        
+        self.logger.info(f"✓ URI validation passed - proceeding with thesaurus navigation")
         
         try:
             # Step 1: Query thesaurus for mappings
@@ -103,6 +150,8 @@ Return ONLY JSON, no additional text.
                 primary_category_uri=primary_cat,
                 secondary_category_uri=secondary_cat
             )
+            
+            self.logger.debug(f"Executing thesaurus query:\n{sparql_query}")
             
             results = await self.query_knowledge_graph(sparql_query)
             
@@ -115,7 +164,9 @@ Return ONLY JSON, no additional text.
                         "summary": {
                             "total_mappings": 0,
                             "exact_matches": 0,
-                            "close_matches": 0
+                            "close_matches": 0,
+                            "primary_used": True,
+                            "secondary_used": bool(secondary_cat)
                         }
                     }
                 )
@@ -130,16 +181,13 @@ Return ONLY JSON, no additional text.
                 category_type = result.get("category_type")
                 
                 # Calculate confidence score
-                confidence = calculate_mapping_confidence(
-                    match_type,
-                    category_type
-                )
+                confidence = calculate_mapping_confidence(match_type, category_type)
                 
                 mapping = {
                     "bim_concept": result.get("bim_concept"),
-                    "bim_label": result.get("bim_label"),
+                    "bim_label": result.get("bim_label", ""),
                     "epd_concept": result.get("epd_concept"),
-                    "epd_label": result.get("epd_label"),
+                    "epd_label": result.get("epd_label", ""),
                     "match_type": match_type,
                     "category_type": category_type,
                     "confidence": confidence
@@ -152,65 +200,65 @@ Return ONLY JSON, no additional text.
                 elif match_type == "closeMatch":
                     close_count += 1
             
-            # Step 3: Use LLM to validate and enrich mappings
-            formatted_mappings = self._format_mappings(mappings)
+            # Sort by confidence (exact > close, primary > secondary)
+            mappings.sort(key=lambda x: (-x["confidence"], x["category_type"]))
             
-            prompt = f"""
-Analyze these thesaurus concept mappings:
-
-{formatted_mappings}
-
-Validate the mappings and return them in the specified JSON format.
-Include a summary with counts.
-"""
+            summary = {
+                "total_mappings": len(mappings),
+                "exact_matches": exact_count,
+                "close_matches": close_count,
+                "primary_used": True,
+                "secondary_used": bool(secondary_cat)
+            }
             
-            interpretation = await self.llm_interpret(
-                prompt=prompt,
-                system_prompt=self.system_prompt,
-                temperature=0.0,
-                parse_json=True
+            self.logger.info(
+                f"✓ Found {len(mappings)} mappings: "
+                f"{exact_count} exact, {close_count} close"
             )
             
-            # Validate structure
-            if "mappings" not in interpretation:
-                interpretation = {
-                    "mappings": mappings,
-                    "summary": {
-                        "total_mappings": len(mappings),
-                        "exact_matches": exact_count,
-                        "close_matches": close_count,
-                        "primary_used": True,
-                        "secondary_used": bool(secondary_cat)
-                    }
-                }
-            
-            self.logger.info(f"Found {len(mappings)} concept mappings")
+            # Step 3: LLM interpretation (optional - for quality assessment)
+            # This can help prioritize mappings if needed
             
             return self.create_result(
                 success=True,
-                data=interpretation
+                data={
+                    "mappings": mappings,
+                    "summary": summary
+                }
             )
             
         except Exception as e:
             self.logger.error(f"Thesaurus navigation failed: {e}", exc_info=True)
             return self.create_result(
                 success=False,
-                error=str(e)
+                error=f"Thesaurus navigation error: {str(e)}"
             )
     
-    def _format_mappings(self, mappings: List[Dict]) -> str:
-        """Format mappings for LLM"""
-        formatted = []
-        formatted.append("THESAURUS CONCEPT MAPPINGS:")
-        formatted.append("=" * 60)
+    def _is_thesaurus_taxonomy_uri(self, uri: str) -> bool:
+        """
+        Validate that URI is a thesaurus taxonomy URI
         
-        for i, mapping in enumerate(mappings, 1):
-            formatted.append(f"\nMapping {i}:")
-            formatted.append(f"  BIM: {mapping['bim_label']} ({mapping['bim_concept']})")
-            formatted.append(f"  EPD: {mapping['epd_label']} ({mapping['epd_concept']})")
-            formatted.append(f"  Match Type: {mapping['match_type']}")
-            formatted.append(f"  Category: {mapping['category_type']}")
-            formatted.append(f"  Confidence: {mapping['confidence']:.2f}")
+        Valid thesaurus taxonomy URIs start with:
+        - http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#
+        - http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/epd#
         
-        formatted.append("=" * 60)
-        return "\n".join(formatted)
+        Invalid (BIM ontology URIs) start with:
+        - http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#
+        
+        Args:
+            uri: URI to validate
+            
+        Returns:
+            True if valid thesaurus taxonomy URI, False otherwise
+        """
+        if not uri:
+            return False
+        
+        valid_prefixes = [
+            "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#",
+            "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/epd#",
+            "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/berr#",
+            "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/dcm#"
+        ]
+        
+        return any(uri.startswith(prefix) for prefix in valid_prefixes)
