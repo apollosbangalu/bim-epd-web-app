@@ -1,12 +1,14 @@
 """
-Thesaurus SPARQL Queries Module - CORRECTED VERSION
+Thesaurus SPARQL Queries Module - FULLY CORRECTED VERSION
 Pre-built SPARQL query templates for SKOS-based concept mapping thesaurus
 
-CRITICAL FIXES:
+CRITICAL FIXES APPLIED:
 1. Correct namespace URIs from original Python app
 2. English-only labels with FILTER(LANG(?label) = "en")
 3. Proper match types (exactMatch, closeMatch)
 4. Confidence scoring based on match type
+5. ✅ FIXED ORDER BY: ORDER BY DESC(?confidence) ?category_type
+6. ✅ FIXED VALUES: Use full URIs with angle brackets <http://...>
 
 Features:
 - Semantic concept mappings between BIM and EPD
@@ -45,32 +47,29 @@ def build_bim_to_epd_mapping_query(
     - Returns actual URIs and labels
     - English-only labels (no COALESCE fallback)
     - Indicates match type and confidence
+    - ✅ FIXED: Correct SPARQL ORDER BY syntax
+    - ✅ FIXED: Use full URIs with angle brackets (matches Python app)
     
     Args:
-        primary_category_uri: Primary BIM category URI
-        secondary_category_uri: Optional secondary BIM category URI
+        primary_category_uri: Primary BIM category URI (FULL URI)
+            Example: "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#Concrete"
+        secondary_category_uri: Optional secondary BIM category URI (FULL URI)
+            Example: "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#Standard"
         
     Returns:
         SPARQL query string
     """
-    # Extract the category name from URI for thesaurus mapping
-    # e.g., "http://...#Concrete" → "Concrete"
-    primary_name = primary_category_uri.split('#')[-1].split('/')[-1]
-    
-    # Build the thesaurus BIM taxonomy URI
-    bim_thesaurus_uri = f"bimtooltax:{primary_name}"
+    # ✅ CRITICAL FIX: Use full URI with angle brackets (like Python app)
+    # DON'T extract and rebuild with prefix - use the URI directly!
     
     # Build secondary category block if provided
     secondary_block = ""
     if secondary_category_uri:
-        secondary_name = secondary_category_uri.split('#')[-1].split('/')[-1]
-        bim_thesaurus_secondary = f"bimtooltax:{secondary_name}"
-        
         secondary_block = f"""
     UNION
     # Secondary category matching (if provided)
     {{
-        VALUES ?bim_concept {{ {bim_thesaurus_secondary} }}
+        VALUES ?bim_concept {{ <{secondary_category_uri}> }}
         BIND("secondary" AS ?category_type)
         
         # Exact matches
@@ -112,7 +111,7 @@ SELECT DISTINCT
 WHERE {{
     # Primary category matching
     {{
-        VALUES ?bim_concept {{ {bim_thesaurus_uri} }}
+        VALUES ?bim_concept {{ <{primary_category_uri}> }}
         BIND("primary" AS ?category_type)
         
         # Exact matches (confidence 1.0)
@@ -141,9 +140,10 @@ WHERE {{
     }}
     {secondary_block}
 }}
-ORDER BY ?confidence DESC, ?category_type
+ORDER BY DESC(?confidence) ?category_type
 """
     return query
+
 
 def build_bim_ontology_to_thesaurus_mapping_query(bim_ontology_uri: str) -> str:
     """
@@ -152,7 +152,7 @@ def build_bim_ontology_to_thesaurus_mapping_query(bim_ontology_uri: str) -> str:
     Uses owl:equivalentClass to find the mapping
     
     Args:
-        bim_ontology_uri: BIM ontology URI (e.g., "btml:Concrete")
+        bim_ontology_uri: BIM ontology URI (e.g., "http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete")
         
     Returns:
         SPARQL query string

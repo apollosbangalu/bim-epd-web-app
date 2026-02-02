@@ -407,10 +407,13 @@ class AgentOrchestrator:
         })
         
         try:
-            # Call Similarity Judge Agent
+            # ✅ FIX: Extract candidates list from dict
+            candidates_list = epd_candidates.get("candidates", [])
+            
+            # ✅ FIX: Use correct key "epd_products" and pass list
             result = await self.similarity_judge.execute({
                 "bim_material": bim_material,
-                "epd_candidates": epd_candidates,
+                "epd_products": candidates_list,
                 "concept_mappings": concept_mappings
             })
             
@@ -423,7 +426,7 @@ class AgentOrchestrator:
                 return {"success": False, "error": error}
             
             data = result.get("data", {})
-            evaluated = data.get("evaluated_products", [])
+            evaluated = data.get("evaluations", [])  # ✅ CORRECT KEY
             
             step_time = time.time() - step_start
             
@@ -440,7 +443,8 @@ class AgentOrchestrator:
                 }
             })
             
-            return {"success": True, "data": data}
+            # ✅ FIX: Return correct structure
+            return {"success": True, "data": {"evaluations": evaluated}}
             
         except Exception as e:
             workflow_steps[-1].update({
@@ -467,9 +471,13 @@ class AgentOrchestrator:
         })
         
         try:
-            # Call Ranking Agent
+            # ✅ FIX: Extract evaluations list from dict
+            evaluations_list = evaluated_products.get("evaluations", [])
+            
+            # ✅ FIX: Use correct key "evaluations" and pass list
             result = await self.ranking_agent.execute({
-                "evaluated_products": evaluated_products,
+                "evaluations": evaluations_list,
+                "concept_mappings": [],  # Empty for now, can enhance later
                 "top_n": top_n,
                 "min_confidence": min_confidence
             })
@@ -511,7 +519,6 @@ class AgentOrchestrator:
                 "error": str(e)
             })
             return {"success": False, "error": str(e)}
-    
     def _create_error_response(
         self, 
         error_message: str, 
