@@ -232,5 +232,6 @@ def _extract_material_name(message: str) -> str:
     
     for phrase in remove_phrases:
         message = message.replace(phrase, "")
-    
+        
+    result = result.replace("_", " ")
     return message.strip()

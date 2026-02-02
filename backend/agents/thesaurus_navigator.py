@@ -85,9 +85,9 @@ Return ONLY JSON, no additional text.
         
         raw_data = input_data["raw_data"]
         
-        # Extract category URIs
-        primary_cat = raw_data.get("primary_category_uri")
-        secondary_cat = raw_data.get("secondary_category_uri")
+        # Extract category URIs - try thesaurus URIs first, fallback to ontology URIs
+        primary_cat = raw_data.get("primary_category_thesaurus_uri") or raw_data.get("primary_category_uri")
+        secondary_cat = raw_data.get("secondary_category_thesaurus_uri") or raw_data.get("secondary_category_uri")
         
         if not primary_cat:
             return self.create_result(

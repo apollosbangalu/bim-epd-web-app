@@ -12,6 +12,7 @@ Input: Material name (from user)
 Output: Complete BIM material data structure
 """
 import logging
+from typing import Optional
 from typing import Dict, Any
 from agents.base_agent import BaseAgent
 from llm.base import BaseLLMClient
@@ -165,6 +166,7 @@ Return valid JSON only.
                     "semantic_interpretation": self._create_default_interpretation(material_data)
                 }
             
+            interpretation = await self._transform_to_thesaurus_uris(interpretation)
             self.logger.info("Successfully extracted and interpreted BIM material")
             
             return self.create_result(
@@ -179,6 +181,108 @@ Return valid JSON only.
                 error=str(e)
             )
     
+    async def _transform_to_thesaurus_uris(
+        self, 
+        interpretation: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Transform BIM ontology URIs to thesaurus taxonomy URIs using owl:equivalentClass
+        
+        This matches the Python app's _map_to_thesaurus() method EXACTLY.
+        Uses SPARQL to query the thesaurus graph for owl:equivalentClass relationships.
+        
+        Args:
+            interpretation: BIM material data with ontology URIs
+            
+        Returns:
+            Same data with additional thesaurus taxonomy URIs added
+        """
+        raw_data = interpretation.get("raw_data", {})
+        
+        # Transform primary category URI
+        primary_uri = raw_data.get("primary_category_uri")
+        if primary_uri:
+            thesaurus_uri = await self._query_thesaurus_mapping(primary_uri)
+            raw_data["primary_category_thesaurus_uri"] = thesaurus_uri
+            if thesaurus_uri:
+                self.logger.info(f"✓ Mapped primary: {primary_uri.split('#')[-1]} → {thesaurus_uri.split('#')[-1]}")
+            else:
+                self.logger.warning(f"⚠ No thesaurus mapping found for: {primary_uri}")
+        
+        # Transform secondary category URI
+        secondary_uri = raw_data.get("secondary_category_uri")
+        if secondary_uri:
+            thesaurus_uri = await self._query_thesaurus_mapping(secondary_uri)
+            raw_data["secondary_category_thesaurus_uri"] = thesaurus_uri
+            if thesaurus_uri:
+                self.logger.info(f"✓ Mapped secondary: {secondary_uri.split('#')[-1]} → {thesaurus_uri.split('#')[-1]}")
+        else:
+            raw_data["secondary_category_thesaurus_uri"] = None
+        
+        return interpretation
+
+
+    async def _query_thesaurus_mapping(self, bim_ontology_uri: str) -> Optional[str]:
+        """
+        Query thesaurus for equivalent taxonomy URI using owl:equivalentClass
+        
+        This replicates the Python app's thesaurus mapping agent behavior EXACTLY.
+        
+        Args:
+            bim_ontology_uri: BIM ontology URI
+                Example: "http://www.BimToolsMaterialLibrary.com/BimBuildingMaterialsOntology#Concrete"
+            
+        Returns:
+            Thesaurus taxonomy URI or None
+                Example: "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#Concrete"
+        """
+        # Build SPARQL query to find owl:equivalentClass relationship
+        query = f"""
+    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+    SELECT ?thesaurus_uri ?label
+    WHERE {{
+        # Find thesaurus concept equivalent to BIM ontology concept
+        ?thesaurus_uri owl:equivalentClass <{bim_ontology_uri}> .
+        
+        # Ensure it's from bimtooltax namespace
+        FILTER(STRSTARTS(STR(?thesaurus_uri), "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/bimtool#"))
+        
+        # Get label (English only)
+        OPTIONAL {{
+            ?thesaurus_uri skos:prefLabel ?label .
+            FILTER(LANG(?label) = "en")
+        }}
+    }}
+    LIMIT 1
+    """
+        
+        try:
+            # Import here to avoid circular dependency
+            from sparql.client import SPARQLClient
+            from core.config import settings
+            
+            # Create thesaurus SPARQL client
+            thesaurus_client = SPARQLClient(
+                repository_name="thesaurus",
+                fuseki_url=settings.fuseki_url,
+                graphdb_url=settings.graphdb_url
+            )
+            
+            # Execute query
+            results = await thesaurus_client.query(query)
+            
+            if results and len(results) > 0:
+                return results[0].get("thesaurus_uri")
+            else:
+                return None
+                
+        except Exception as e:
+            self.logger.error(f"Thesaurus mapping query failed: {e}")
+            return None
+
+
     def _format_material_data(self, material_data: Dict[str, str]) -> str:
         """Format material data for LLM consumption"""
         formatted = []

@@ -94,8 +94,8 @@ def build_bim_to_epd_mapping_query(
         ?epd_concept skos:prefLabel ?epd_label .
         FILTER(LANG(?epd_label) = "en")
         
-        # Ensure EPD concept is in EPD taxonomy
-        FILTER(STRSTARTS(STR(?epd_concept), STR(epdtax:)))
+        # Ensure EPD concept is in EPD taxonomy - ✅ FIXED!
+        FILTER(STRSTARTS(STR(?epd_concept), "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/epd#"))
     }}
 """
     
@@ -136,15 +136,14 @@ WHERE {{
         ?epd_concept skos:prefLabel ?epd_label .
         FILTER(LANG(?epd_label) = "en")
         
-        # Ensure EPD concept is in EPD taxonomy
-        FILTER(STRSTARTS(STR(?epd_concept), STR(epdtax:)))
+        # Ensure EPD concept is in EPD taxonomy - ✅ FIXED!
+        FILTER(STRSTARTS(STR(?epd_concept), "http://bimlcaintegration/buildingmaterialsepdilcd/thesaurus/epd#"))
     }}
     {secondary_block}
 }}
 ORDER BY ?confidence DESC, ?category_type
 """
     return query
-
 
 def build_bim_ontology_to_thesaurus_mapping_query(bim_ontology_uri: str) -> str:
     """
