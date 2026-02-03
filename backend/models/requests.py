@@ -60,10 +60,16 @@ class ChatQueryRequest(BaseModel):
         description="Enable streaming responses"
     )
     
-    # NEW FIELD for Graph RAG ontology selection
+    # Field for Graph RAG ontology selection
     ontology: Optional[str] = Field(
         default=None,
         description="Target ontology for graph_rag queries: 'bimtool', 'epd', or 'thesaurus'"
+    )
+    
+    # NEW: Support for detailed information in cross-match queries via chat endpoint
+    include_details: bool = Field(
+        default=False,
+        description="Include comprehensive product details in cross-match results (Step 6)"
     )
     
     @field_validator('message')
@@ -102,7 +108,8 @@ class ChatQueryRequest(BaseModel):
                 "llm_provider": "openai",
                 "temperature": 0.0,
                 "stream": False,
-                "ontology": None
+                "ontology": None,
+                "include_details": False
             }
         }
 
@@ -111,7 +118,8 @@ class CrossMatchRequest(BaseModel):
     """
     Request model specifically for cross-matching workflow
     
-    Provides more control over the matching process
+    Provides more control over the matching process.
+    Supports optional Step 6 for fetching comprehensive product details.
     """
     material_name: str = Field(
         ...,
@@ -140,7 +148,17 @@ class CrossMatchRequest(BaseModel):
     
     include_details: bool = Field(
         default=True,
-        description="Include comprehensive product details in results"
+        description="""Include comprehensive product details in results (Step 6)
+        
+        When enabled, fetches detailed information for top-ranked products:
+        - ProcessDataSet URI (graph identifier)
+        - Uri property (EPD online web link)
+        - Total GWP (Global Warming Potential)
+        - Technical specifications
+        - Product classifications
+        
+        Note: Adds ~1-2 seconds to query time
+        """
     )
     
     @field_validator('material_name')

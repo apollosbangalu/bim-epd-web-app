@@ -1,11 +1,11 @@
 """
-Enhanced Agent Orchestrator - CORRECTED VERSION WITH STEP 6
+Enhanced Agent Orchestrator - COMPLETE VERSION WITH DETAILED INFO SUPPORT
 Orchestrates complete 5-step (or 6-step) cross-matching workflow
 
 FEATURES:
 - CRITICAL FIX: Passes thesaurus_client to BIM Extractor Agent
 - NEW: Optional Step 6 - Detailed Information Agent for comprehensive product details
-- PRESERVED: Steps 1-5 exactly as in working version
+- Fetches web links, GWP values, and technical specifications for top matches
 """
 import logging
 from typing import Dict, Any, List, Optional
@@ -50,8 +50,7 @@ class AgentOrchestrator:
         self.include_detailed_info = include_detailed_info
         
         logger.info(f"Initializing AgentOrchestrator with {llm_provider}")
-        if include_detailed_info:
-            logger.info("✓ Detailed info enabled (Step 6 will run)")
+        logger.info(f"Detailed info enabled: {include_detailed_info}")  # ✅ NEW LOG
         
         # Create LLM client
         self.llm_client = create_llm_client(llm_provider)
@@ -154,7 +153,7 @@ class AgentOrchestrator:
             material_name: BIM material name to match
             top_n: Number of top matches to return
             min_confidence: Minimum confidence level filter
-            max_details: Number of products to fetch detailed info for (if Step 6 enabled)
+            max_details: Number of products to fetch detailed info for (if enabled)
         """
         start_time = time.time()
         workflow_steps = []
@@ -165,7 +164,7 @@ class AgentOrchestrator:
         
         try:
             # STEP 1: Extract BIM Material
-            # ✅ UNCHANGED FROM WORKING VERSION
+            # ✅ Now uses thesaurus client internally for URI transformation
             step1_result = await self._execute_step_1(material_name, workflow_steps)
             if not step1_result["success"]:
                 return self._create_error_response("BIM material not found", workflow_steps)
@@ -190,7 +189,6 @@ class AgentOrchestrator:
                 )
             
             # STEP 2: Navigate Thesaurus
-            # ✅ UNCHANGED FROM WORKING VERSION
             step2_result = await self._execute_step_2(bim_material, workflow_steps)
             if not step2_result["success"]:
                 return self._create_error_response("Thesaurus navigation failed", workflow_steps)
@@ -198,7 +196,6 @@ class AgentOrchestrator:
             concept_mappings = step2_result["data"]
             
             # STEP 3: Extract EPD Products
-            # ✅ UNCHANGED FROM WORKING VERSION
             step3_result = await self._execute_step_3(concept_mappings, workflow_steps)
             if not step3_result["success"]:
                 return self._create_error_response("EPD extraction failed", workflow_steps)
@@ -206,7 +203,6 @@ class AgentOrchestrator:
             epd_candidates = step3_result["data"]
             
             # STEP 4: Evaluate Similarity
-            # ✅ UNCHANGED FROM WORKING VERSION
             step4_result = await self._execute_step_4(
                 bim_material, epd_candidates, concept_mappings, workflow_steps
             )
@@ -216,7 +212,6 @@ class AgentOrchestrator:
             evaluated_products = step4_result["data"]
             
             # STEP 5: Rank and Filter
-            # ✅ UNCHANGED FROM WORKING VERSION
             step5_result = await self._execute_step_5(
                 evaluated_products, top_n, min_confidence, workflow_steps
             )
@@ -226,10 +221,7 @@ class AgentOrchestrator:
             ranked_matches = step5_result["data"]
             
             # ✅ NEW: STEP 6 - Detailed Information (OPTIONAL)
-            # Only runs if include_detailed_info is True and we have matches
             if self.include_detailed_info and self.detailed_info_agent and ranked_matches:
-                logger.info(f"Running optional Step 6 (fetching details for top {max_details} products)...")
-                
                 step6_result = await self._execute_step_6(
                     ranked_matches, max_details, workflow_steps
                 )
@@ -239,34 +231,52 @@ class AgentOrchestrator:
                     ranked_matches = step6_result["data"]
                     logger.info("✓ Step 6 completed: Matches enhanced with detailed info")
                 else:
-                    # Step 6 failed but workflow continues with basic results
+                    # Step 6 failed but workflow continues
                     logger.warning(f"⚠ Step 6 failed: {step6_result.get('error')}")
-                    logger.info("Continuing with basic results (no detailed info)...")
+                    logger.info("Continuing with basic results...")
             
-            # ✅ UNCHANGED: Create final response exactly as working version
+            # Create final response
             execution_time = time.time() - start_time
 
-            # Extract total candidates from Step 3 data (CORRECTED - get length immediately)
-            total_candidates = len(epd_candidates.get("candidates", []))
+            # Extract total candidates from Step 3 data
+            total_candidates = epd_candidates.get("candidates", [])
             
-            return {
+            response = {
                 "success": True,
-                "bim_material": bim_material,  # ✅ CORRECTED: Return directly, not .get("raw_data")
+                "bim_material": bim_material.get("raw_data", {}),
                 "concept_mappings": concept_mappings,
                 "matches": ranked_matches,
                 "workflow_steps": workflow_steps,
-                "total_candidates": total_candidates,
+                "total_candidates": len(total_candidates),
                 "execution_time": execution_time,
-                "metadata": {  # ✅ PRESERVED: Keep metadata field
-                    "material_name": material_name,
-                    "total_matches": len(ranked_matches),
-                    "llm_provider": self.llm_provider
-                }
+                "timestamp": datetime.now().isoformat()
             }
+            
+            logger.info("=" * 80)
+            logger.info(f"Workflow completed in {execution_time:.2f}s")
+            logger.info(f"Found {len(ranked_matches)} matches from {len(total_candidates)} candidates")
+            logger.info("=" * 80)
+            
+            return response
             
         except Exception as e:
             logger.error(f"Workflow failed: {e}", exc_info=True)
-            return self._create_error_response(str(e), workflow_steps)  # ✅ Use helper method
+            
+            # Update last step as failed if it was in progress
+            if workflow_steps and workflow_steps[-1].get("status") == "in_progress":
+                workflow_steps[-1].update({
+                    "status": "failed",
+                    "completed_at": datetime.now().isoformat(),
+                    "error": str(e)
+                })
+            
+            return {
+                "success": False,
+                "error": str(e),
+                "workflow_steps": workflow_steps,
+                "matches": [],
+                "timestamp": datetime.now().isoformat()
+            }
     
     async def _execute_step_1(
         self, 
@@ -285,12 +295,8 @@ class AgentOrchestrator:
         
         try:
             # Call BIM Extractor Agent
-            # ✅ UNCHANGED FROM WORKING VERSION
-            result = await self.bim_extractor.execute({
-                "material_name": material_name
-            })
+            result = await self.bim_extractor.execute({"material_name": material_name})
             
-            # Check if agent execution was successful
             if not result.get("success"):
                 error = result.get("error", "Unknown error")
                 workflow_steps[-1].update({
@@ -299,28 +305,24 @@ class AgentOrchestrator:
                 })
                 return {"success": False, "error": error}
             
-            # ✅ CORRECTED: Direct data access, no extra nesting
             data = result.get("data", {})
+            bim_material = data.get("bim_material", {})
             
             step_time = time.time() - step_start
             
-            # ✅ CORRECTED: Use correct field names from working version
             workflow_steps[-1].update({
                 "status": "completed",
                 "completed_at": datetime.now().isoformat(),
                 "execution_time": step_time,
-                "result_summary": f"Extracted: {data.get('raw_data', {}).get('name', 'Unknown')}",
+                "result_summary": f"Extracted: {bim_material.get('name', 'Unknown')}",
                 "details": {
-                    "material_name": data.get("raw_data", {}).get("name"),
-                    "primary_category": data.get("raw_data", {}).get("class"),  # ✅ CORRECTED: "class" not "primary_category_label"
-                    "secondary_category": data.get("raw_data", {}).get("subclass"),  # ✅ CORRECTED: "subclass" not "secondary_category_label"
-                    "primary_thesaurus_uri": data.get("raw_data", {}).get("primary_category_thesaurus_uri"),
-                    "secondary_thesaurus_uri": data.get("raw_data", {}).get("secondary_category_thesaurus_uri")
+                    "material_name": bim_material.get("name"),
+                    "primary_category": bim_material.get("raw_data", {}).get("primary_category_label"),
+                    "secondary_category": bim_material.get("raw_data", {}).get("secondary_category_label")
                 }
             })
             
-            # ✅ CORRECTED: Return data directly as in working version
-            return {"success": True, "data": data}
+            return {"success": True, "data": bim_material}
             
         except Exception as e:
             workflow_steps[-1].update({
@@ -328,8 +330,7 @@ class AgentOrchestrator:
                 "error": str(e)
             })
             return {"success": False, "error": str(e)}
-
-
+    
     async def _execute_step_2(
         self, 
         bim_material: Dict[str, Any], 
@@ -346,10 +347,9 @@ class AgentOrchestrator:
         })
         
         try:
-            # ✅ CORRECTED: Pass bim_material directly, not wrapped in dict
-            result = await self.thesaurus_navigator.execute(bim_material)
+            # Call Thesaurus Navigator Agent
+            result = await self.thesaurus_navigator.execute({"bim_material": bim_material})
             
-            # Check if agent execution was successful
             if not result.get("success"):
                 error = result.get("error", "Unknown error")
                 workflow_steps[-1].update({
@@ -358,31 +358,29 @@ class AgentOrchestrator:
                 })
                 return {"success": False, "error": error}
             
-            # ✅ CORRECTED: Direct data access, no extra nesting
             data = result.get("data", {})
+            concept_mappings = data.get("concept_mappings", {})
             
             step_time = time.time() - step_start
             
-            # ✅ CORRECTED: Use correct field names from working version
-            # Extract mapping statistics
-            mappings = data.get("mappings", [])  # ✅ CORRECTED: "mappings" not "concept_mappings"
-            exact_count = sum(1 for m in mappings if m.get("match_type") == "exactMatch")  # ✅ CORRECTED: "match_type" not "match_quality"
-            close_count = sum(1 for m in mappings if m.get("match_type") == "closeMatch")
+            # Count different types of mappings
+            all_concepts = concept_mappings.get("all_mapped_concepts", [])
+            exact_matches = [c for c in all_concepts if c.get("match_quality") == "exactMatch"]
+            close_matches = [c for c in all_concepts if c.get("match_quality") == "closeMatch"]
             
             workflow_steps[-1].update({
                 "status": "completed",
                 "completed_at": datetime.now().isoformat(),
                 "execution_time": step_time,
-                "result_summary": f"Found {len(mappings)} concept mappings ({exact_count} exact, {close_count} close)",
+                "result_summary": f"Found {len(all_concepts)} concepts ({len(exact_matches)} exact, {len(close_matches)} close)",
                 "details": {
-                    "total_mappings": len(mappings),
-                    "exact_matches": exact_count,
-                    "close_matches": close_count
+                    "total_concepts": len(all_concepts),
+                    "exact_matches": len(exact_matches),
+                    "close_matches": len(close_matches)
                 }
             })
             
-            # ✅ CORRECTED: Return data directly as in working version
-            return {"success": True, "data": data}
+            return {"success": True, "data": concept_mappings}
             
         except Exception as e:
             workflow_steps[-1].update({
@@ -390,7 +388,6 @@ class AgentOrchestrator:
                 "error": str(e)
             })
             return {"success": False, "error": str(e)}
-
     
     async def _execute_step_3(
         self, 
@@ -408,7 +405,6 @@ class AgentOrchestrator:
         })
         
         try:
-            # ✅ UNCHANGED FROM WORKING VERSION
             # Call EPD Extractor Agent
             result = await self.epd_extractor.execute(concept_mappings)
             
@@ -462,7 +458,6 @@ class AgentOrchestrator:
         })
         
         try:
-            # ✅ UNCHANGED FROM WORKING VERSION
             # ✅ FIX: Extract candidates list from dict
             candidates_list = epd_candidates.get("candidates", [])
             
@@ -546,7 +541,6 @@ class AgentOrchestrator:
         })
         
         try:
-            # ✅ UNCHANGED FROM WORKING VERSION
             # ✅ FIX: Extract evaluations list from dict
             evaluations_list = evaluated_products.get("evaluations", [])
             
@@ -603,7 +597,7 @@ class AgentOrchestrator:
         workflow_steps: List[Dict]
     ) -> Dict[str, Any]:
         """
-        ✅ NEW: Execute Step 6: Detailed Information (OPTIONAL)
+        Execute Step 6: Detailed Information (OPTIONAL)
         
         Fetches comprehensive details for top-ranked EPD products:
         - ProcessDataSet URI (graph identifier)
@@ -638,7 +632,6 @@ class AgentOrchestrator:
                     "error": error,
                     "result_summary": "Detail fetching failed (continuing with basic results)"
                 })
-                # Return original matches if Step 6 fails (non-fatal)
                 return {"success": False, "error": error, "data": ranked_matches}
             
             data = result.get("data", {})
@@ -674,7 +667,7 @@ class AgentOrchestrator:
                 "result_summary": "Detail fetching failed (continuing with basic results)"
             })
             logger.error(f"Step 6 failed: {e}", exc_info=True)
-            # Return original ranked_matches if Step 6 fails (non-fatal)
+            # Return original ranked_matches if Step 6 fails
             return {"success": False, "error": str(e), "data": ranked_matches}
     
     def _create_error_response(

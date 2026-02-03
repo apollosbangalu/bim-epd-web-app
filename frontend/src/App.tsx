@@ -1,6 +1,8 @@
 /**
  * Main Application Component
- * Integrates agent selection, workflow visualization, and chat interface
+ * Integrates agent selection, workflow visualization, detailed information display, and chat interface
+ * 
+ * NEW: Supports Step 6 - Detailed Information Agent
  */
 import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
@@ -10,6 +12,7 @@ import { ChatWindow } from './components/chat/ChatWindow'
 import { ChatInput } from './components/chat/ChatInput'
 import { AgentSelector, type AgentConfig } from './components/AgentSelector'
 import { WorkflowProgress, type WorkflowStep } from './components/WorkflowProgress'
+import { DetailedInformationDisplay } from './components/DetailedInformationDisplay'
 import { apiClient, type CrossMatchResponse } from './services/apiClient'
 
 interface Message {
@@ -19,6 +22,7 @@ interface Message {
   timestamp: Date
   workflowSteps?: WorkflowStep[]
   matchResults?: any[]
+  bimMaterial?: any  // NEW: Store BIM material for detailed info display
 }
 
 function App() {
@@ -34,21 +38,35 @@ function App() {
   const [currentWorkflow, setCurrentWorkflow] = useState<WorkflowStep[]>([])
   const [currentStep, setCurrentStep] = useState(0)
   const [currentMaterialName, setCurrentMaterialName] = useState<string>('')
+  
+  // NEW: State for detailed information toggle
+  const [includeDetailedInfo, setIncludeDetailedInfo] = useState(true)  // Default: enabled
 
-  // Initialize workflow steps
+  // Initialize workflow steps (conditionally include Step 6)
   useEffect(() => {
     if (agentConfig.agentType === 'cross_match') {
-      setCurrentWorkflow([
+      const baseSteps: WorkflowStep[] = [
         { step_number: 1, step_name: 'BIM Material Extraction', status: 'pending' },
         { step_number: 2, step_name: 'Thesaurus Navigation', status: 'pending' },
         { step_number: 3, step_name: 'EPD Product Search', status: 'pending' },
         { step_number: 4, step_name: 'Similarity Evaluation', status: 'pending' },
         { step_number: 5, step_name: 'Ranking & Filtering', status: 'pending' }
-      ])
+      ]
+      
+      // Add Step 6 if detailed info is enabled
+      if (includeDetailedInfo) {
+        baseSteps.push({
+          step_number: 6,
+          step_name: 'Detailed Information',
+          status: 'pending'
+        })
+      }
+      
+      setCurrentWorkflow(baseSteps)
     } else {
       setCurrentWorkflow([])
     }
-  }, [agentConfig.agentType])
+  }, [agentConfig.agentType, includeDetailedInfo])
 
   const handleSendMessage = async (message: string) => {
     if (!message.trim() || isProcessing) return
@@ -93,7 +111,7 @@ function App() {
     const materialName = extractMaterialName(message)
     setCurrentMaterialName(materialName)
 
-    // Reset and start workflow
+    // Reset and start workflow - include Step 6 if detailed info is enabled
     const initialSteps: WorkflowStep[] = [
       { step_number: 1, step_name: 'BIM Material Extraction', status: 'pending' },
       { step_number: 2, step_name: 'Thesaurus Navigation', status: 'pending' },
@@ -101,13 +119,24 @@ function App() {
       { step_number: 4, step_name: 'Similarity Evaluation', status: 'pending' },
       { step_number: 5, step_name: 'Ranking & Filtering', status: 'pending' }
     ]
+    
+    // Add Step 6 if detailed info is enabled
+    if (includeDetailedInfo) {
+      initialSteps.push({
+        step_number: 6,
+        step_name: 'Detailed Information',
+        status: 'pending'
+      })
+    }
+    
     setCurrentWorkflow(initialSteps)
     setCurrentStep(1)
 
     // Simulate workflow progress (in real implementation, this would come from WebSocket or polling)
+    const totalSteps = includeDetailedInfo ? 6 : 5
     const progressInterval = setInterval(() => {
       setCurrentStep((prev) => {
-        if (prev < 5) {
+        if (prev < totalSteps) {
           return prev + 1
         }
         clearInterval(progressInterval)
@@ -116,13 +145,13 @@ function App() {
     }, 2000) // Update every 2 seconds
 
     try {
-      // Call cross-match API
+      // Call cross-match API with detailed info flag
       const response: CrossMatchResponse = await apiClient.crossMatch({
         materialName,
         agentName: agentConfig.agentName,
         provider: agentConfig.provider,
         topN: 10,
-        includeDetails: true
+        includeDetails: includeDetailedInfo  // ✅ Pass detailed info flag
       })
 
       clearInterval(progressInterval)
@@ -131,7 +160,7 @@ function App() {
         // Update workflow with actual steps from response
         if (response.workflow_steps) {
           setCurrentWorkflow(response.workflow_steps)
-          setCurrentStep(5)
+          setCurrentStep(response.workflow_steps.length)
         }
 
         // Format response message
@@ -143,7 +172,8 @@ function App() {
           content: resultMessage,
           timestamp: new Date(),
           workflowSteps: response.workflow_steps,
-          matchResults: response.matches
+          matchResults: response.matches,
+          bimMaterial: response.bim_material  // ✅ Store BIM material for detailed display
         }
         setMessages((prev) => [...prev, assistantMessage])
       } else {
@@ -287,6 +317,42 @@ function App() {
                   defaultAgentType="cross_match"
                   defaultProvider="openai"
                 />
+                
+                {/* NEW: Detailed Information Toggle */}
+                {agentConfig.agentType === 'cross_match' && (
+                  <div style={{
+                    padding: '16px',
+                    borderTop: '1px solid #333',
+                    marginTop: '8px'
+                  }}>
+                    <label style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      cursor: 'pointer',
+                      color: '#e0e0e0',
+                      fontSize: '14px'
+                    }}>
+                      <input
+                        type="checkbox"
+                        checked={includeDetailedInfo}
+                        onChange={(e) => setIncludeDetailedInfo(e.target.checked)}
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          cursor: 'pointer',
+                          accentColor: '#00d4ff'
+                        }}
+                      />
+                      <div>
+                        <div style={{ fontWeight: 500 }}>Fetch Detailed Info</div>
+                        <div style={{ fontSize: '12px', color: '#999', marginTop: '2px' }}>
+                          Step 6: Web links, GWP, technical specs (~+2s)
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -318,7 +384,33 @@ function App() {
               </div>
             )}
 
-            <ChatWindow messages={messages} />
+            {/* Chat Window with Detailed Information Display */}
+            <div style={{ flex: 1, overflow: 'auto' }}>
+              <ChatWindow messages={messages} />
+              
+              {/* NEW: Detailed Information Display for latest message with results */}
+              {messages.length > 0 && (() => {
+                const latestMessage = messages[messages.length - 1]
+                const hasDetailedInfo = latestMessage.matchResults?.some(
+                  (match: any) => match.detailed_info
+                )
+                
+                return hasDetailedInfo && latestMessage.bimMaterial ? (
+                  <div style={{ 
+                    maxWidth: '1200px',
+                    margin: '0 auto',
+                    padding: '16px'
+                  }}>
+                    <DetailedInformationDisplay
+                      bimMaterial={latestMessage.bimMaterial}
+                      matches={latestMessage.matchResults || []}
+                      maxDisplay={5}
+                    />
+                  </div>
+                ) : null
+              })()}
+            </div>
+            
             <ChatInput 
               onSend={handleSendMessage}
             />

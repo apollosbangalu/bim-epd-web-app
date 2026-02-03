@@ -13,6 +13,7 @@ FIXES APPLIED:
 2. Fixed bug: undefined 'result' variable
 3. cross_match() now extracts material name from natural language queries
 4. Added debug logging for extraction process
+5. Added support for detailed information agent (Step 6)
 """
 import logging
 import re
@@ -63,13 +64,15 @@ async def chat_query(request: ChatQueryRequest):
             
             # Create orchestrator
             orchestrator = AgentOrchestrator(
-                llm_provider=request.llm_provider or settings.default_llm_provider
+                llm_provider=request.llm_provider or settings.default_llm_provider,
+                include_detailed_info=request.include_details  # Pass detailed info flag
             )
             
-            # Execute 5-step workflow
+            # Execute workflow (5-step or 6-step depending on include_details)
             result = await orchestrator.execute_workflow(
                 material_name=material_name,
-                top_n=10
+                top_n=10,
+                max_details=5  # Number of products to fetch detailed info for
             )
             
             logger.info("Cross-match workflow completed successfully")
@@ -146,12 +149,13 @@ async def cross_match(request: CrossMatchRequest):
     Dedicated cross-matching endpoint
     
     Provides more control over the matching process with explicit parameters.
-    Executes the 5-step workflow:
+    Executes the 5-step workflow (or 6-step if include_details=True):
     1. Extract BIM material data
     2. Navigate thesaurus to find concept mappings
     3. Search EPD products using mapped concepts
     4. Evaluate similarity between BIM material and EPD products
     5. Rank and return top matches
+    6. Fetch detailed information (OPTIONAL - if include_details=True)
     
     Automatically extracts material name from natural language queries.
     
@@ -170,6 +174,7 @@ async def cross_match(request: CrossMatchRequest):
         HTTPException: 400 for invalid input, 500 for processing errors
     """
     logger.info(f"Received cross-match request: material_name={request.material_name}")
+    logger.info(f"Include detailed info: {request.include_details}")
     
     try:
         # Validate material name
@@ -184,21 +189,30 @@ async def cross_match(request: CrossMatchRequest):
         extracted_name = _extract_material_name(request.material_name)
         logger.info(f"Extracted material name: '{extracted_name}' from query: '{request.material_name}'")
         
-        # Create orchestrator
+        # Create orchestrator with detailed info flag
         logger.info(f"Creating orchestrator with provider: {request.llm_provider or settings.default_llm_provider}")
         orchestrator = AgentOrchestrator(
             llm_provider=request.llm_provider or settings.default_llm_provider,
-            include_detailed_info=request.include_details
+            include_detailed_info=request.include_details  # ✅ Pass detailed info flag
         )
         
         # Execute workflow with extracted material name
         logger.info(f"Executing cross-match workflow for: {extracted_name}")
         result = await orchestrator.execute_workflow(
             material_name=extracted_name,  # ✅ Use extracted name, not raw query
-            top_n=request.top_n or 10
+            top_n=request.top_n or 10,
+            max_details=5  # ✅ Number of products to fetch detailed info for
         )
         
         logger.info(f"Cross-match completed: {len(result.get('matches', []))} matches found")
+        
+        # Log Step 6 status if detailed info was requested
+        if request.include_details:
+            workflow_steps = result.get('workflow_steps', [])
+            step_6 = next((s for s in workflow_steps if s.get('step_number') == 6), None)
+            if step_6:
+                logger.info(f"Step 6 (Detailed Information) status: {step_6.get('status')}")
+        
         return result
     
     except HTTPException:

@@ -15,11 +15,10 @@ Input: Ranked matches (top 5-10)
 Output: Enhanced match results with comprehensive details
 """
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from agents.base_agent import BaseAgent
 from llm.base import BaseLLMClient
 from sparql.client import SPARQLClient
-from sparql.queries.epd_queries import build_epd_product_details_query
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +28,10 @@ class DetailedInformationAgent(BaseAgent):
     Agent for fetching detailed EPD product information
     
     Optional Step 6: Enhance top matches with comprehensive details
+    
+    This agent fetches TWO critical URIs:
+    1. ProcessDataSet URI - The graph identifier (e.g., epd:ConcretePavingBraemar...)
+    2. Uri property - The EPD online web link from KeyDataSetInformation
     """
     
     def __init__(self, llm_client: BaseLLMClient, sparql_client: SPARQLClient):
@@ -68,11 +71,14 @@ class DetailedInformationAgent(BaseAgent):
         
         try:
             # Extract EPD product URIs
-            product_uris = [
-                match.get("epd_uri")
-                for match in top_matches
-                if match.get("epd_uri")
-            ]
+            product_uris = []
+            for match in top_matches:
+                # Try different possible URI locations based on data structure
+                uri = (match.get("epd_uri") or 
+                       match.get("epd_product", {}).get("uri") or
+                       match.get("epd_product", {}).get("raw_data", {}).get("uri"))
+                if uri:
+                    product_uris.append(uri)
             
             if not product_uris:
                 self.logger.warning("No valid product URIs found")
@@ -81,8 +87,10 @@ class DetailedInformationAgent(BaseAgent):
                     data={"enhanced_matches": ranked_matches}
                 )
             
+            # Build SPARQL query for detailed information
+            sparql_query = self._build_epd_details_query(product_uris)
+            
             # Query for detailed information
-            sparql_query = build_epd_product_details_query(product_uris)
             results = await self.query_knowledge_graph(sparql_query)
             
             # Create lookup dictionary
@@ -92,6 +100,7 @@ class DetailedInformationAgent(BaseAgent):
                 details_lookup[uri] = {
                     "web_link": result.get("webLink"),
                     "total_gwp": result.get("totalGWP"),
+                    "name": result.get("name"),
                     "name_detail": result.get("nameDetail"),
                     "product_type_category": result.get("productTypeCategory"),
                     "technical_purpose": result.get("technicalPurpose"),
@@ -102,7 +111,11 @@ class DetailedInformationAgent(BaseAgent):
             # Enhance matches with detailed information
             enhanced_matches = []
             for match in top_matches:
-                epd_uri = match.get("epd_uri")
+                # Get the EPD URI from match
+                epd_uri = (match.get("epd_uri") or 
+                          match.get("epd_product", {}).get("uri") or
+                          match.get("epd_product", {}).get("raw_data", {}).get("uri"))
+                
                 details = details_lookup.get(epd_uri, {})
                 
                 enhanced_match = {
@@ -130,3 +143,82 @@ class DetailedInformationAgent(BaseAgent):
                 success=True,
                 data={"enhanced_matches": ranked_matches}
             )
+    
+    def _build_epd_details_query(self, product_uris: List[str]) -> str:
+        """
+        Build SPARQL query for fetching comprehensive EPD product details
+        
+        CRITICAL: Fetches TWO URIs:
+        1. ProcessDataSet URI (?product) - The graph identifier
+        2. Uri property (?webLink) - The EPD online web link from KeyDataSetInformation
+        
+        Also fetches:
+        - Total GWP across all life cycle phases
+        - Product names and classifications
+        - Technical details
+        - Location information
+        
+        Args:
+            product_uris: List of EPD ProcessDataSet URIs
+            
+        Returns:
+            SPARQL query string
+        """
+        # Format URIs for VALUES clause - MUST use full URIs with angle brackets
+        values_clause = " ".join(f"<{uri}>" for uri in product_uris)
+        
+        # CRITICAL: This query pattern matches the Python app EXACTLY
+        query = f"""
+PREFIX epd: <http://www.EpdLcaOntology.com/EpdLcaDataSetOntology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?product ?name ?nameDetail ?productTypeCategory 
+       ?webLink ?technicalPurpose ?technologyDescription ?location
+       (SUM(?gwpValue) AS ?totalGWP)
+WHERE {{
+  # Bind specific products
+  VALUES ?product {{ {values_clause} }}
+  
+  ?product epd:hasProcessInformation ?procInfo .
+  ?procInfo epd:hasKeyDataSetInformation ?keyInfo .
+  
+  # Required fields
+  ?keyInfo epd:Name ?name .
+  
+  # CRITICAL: Web link from KeyDataSetInformation (Uri property)
+  OPTIONAL {{ ?keyInfo epd:Uri ?webLink }}
+  
+  # Classification
+  OPTIONAL {{
+    ?keyInfo epd:NameDetail ?nameDetail ;
+             epd:hasClassificationOrCategory ?classif .
+    ?classif epd:ProductTypeCategory ?productTypeCategory .
+  }}
+  
+  # Technical information
+  OPTIONAL {{ ?keyInfo epd:TechnicalPurpose ?technicalPurpose }}
+  OPTIONAL {{ ?procInfo epd:hasTechnology ?tech .
+              ?tech epd:TechnologyDescription ?technologyDescription }}
+  
+  # Location
+  OPTIONAL {{ ?procInfo epd:hasGeography ?geo .
+              ?geo epd:Location ?location }}
+  
+  # Total GWP calculation (sum across all life cycle phases)
+  OPTIONAL {{
+    ?product epd:hasLCIAResult ?lciaResult .
+    ?lciaResult epd:hasLCIAResultIndicator ?indicator .
+    ?indicator rdfs:label ?indicatorLabel ;
+               epd:hasImpactCategoryIndicatorValue ?impactValue .
+    ?impactValue epd:MeanValue ?gwpValue .
+    
+    # Filter for GWP indicator only
+    FILTER(CONTAINS(LCASE(?indicatorLabel), "gwp") || 
+           CONTAINS(LCASE(?indicatorLabel), "global warming"))
+  }}
+}}
+GROUP BY ?product ?name ?nameDetail ?productTypeCategory 
+         ?webLink ?technicalPurpose ?technologyDescription ?location
+ORDER BY ?name
+"""
+        return query
