@@ -148,17 +148,49 @@ class BaseAgent(ABC):
             # Parse JSON if requested
             if parse_json:
                 try:
+                    # ✅ ROBUST JSON EXTRACTION with edge case handling
+                    json_str = ""
+                    
                     # Try to extract JSON from markdown code blocks
                     if "```json" in response:
                         json_start = response.find("```json") + 7
                         json_end = response.find("```", json_start)
-                        json_str = response[json_start:json_end].strip()
+                        if json_end != -1:  # ✅ Check if closing ``` found
+                            json_str = response[json_start:json_end].strip()
+                        else:  # No closing ```, take rest of string
+                            json_str = response[json_start:].strip()
                     elif "```" in response:
                         json_start = response.find("```") + 3
                         json_end = response.find("```", json_start)
-                        json_str = response[json_start:json_end].strip()
+                        if json_end != -1:  # ✅ Check if closing ``` found
+                            json_str = response[json_start:json_end].strip()
+                        else:  # No closing ```, take rest of string
+                            json_str = response[json_start:].strip()
                     else:
+                        # ✅ Try to find JSON object boundaries
                         json_str = response.strip()
+                        # If response contains text before/after JSON, extract just the JSON
+                        if '{' in json_str:
+                            start_idx = json_str.find('{')
+                            # Find matching closing brace
+                            brace_count = 0
+                            end_idx = -1
+                            for i in range(start_idx, len(json_str)):
+                                if json_str[i] == '{':
+                                    brace_count += 1
+                                elif json_str[i] == '}':
+                                    brace_count -= 1
+                                    if brace_count == 0:
+                                        end_idx = i + 1
+                                        break
+                            if end_idx != -1:
+                                json_str = json_str[start_idx:end_idx].strip()
+                    
+                    # ✅ Final validation before parsing
+                    if not json_str:
+                        self.logger.error("Extracted JSON string is empty")
+                        self.logger.debug(f"Full response was: {response[:500]}...")
+                        raise ValueError("Empty JSON string after extraction")
                     
                     # Parse JSON
                     parsed = json.loads(json_str)

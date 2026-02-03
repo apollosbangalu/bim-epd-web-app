@@ -197,6 +197,9 @@ class AgentOrchestrator:
             
             # Create final response
             execution_time = time.time() - start_time
+
+            # Extract total candidates from Step 3 data
+            total_candidates = len(epd_candidates.get("candidates", []))
             
             return {
                 "success": True,
@@ -204,6 +207,7 @@ class AgentOrchestrator:
                 "concept_mappings": concept_mappings,
                 "matches": ranked_matches,
                 "workflow_steps": workflow_steps,
+                "total_candidates": total_candidates,
                 "execution_time": execution_time,
                 "metadata": {
                     "material_name": material_name,
@@ -366,7 +370,7 @@ class AgentOrchestrator:
                 return {"success": False, "error": error}
             
             data = result.get("data", {})
-            candidates = data.get("candidates", [])
+            candidates = data.get("products", [])
             
             step_time = time.time() - step_start
             
@@ -380,7 +384,7 @@ class AgentOrchestrator:
                 }
             })
             
-            return {"success": True, "data": data}
+            return {"success": True, "data": {"candidates": candidates}} 
             
         except Exception as e:
             workflow_steps[-1].update({
@@ -410,7 +414,13 @@ class AgentOrchestrator:
             # ✅ FIX: Extract candidates list from dict
             candidates_list = epd_candidates.get("candidates", [])
             
-            # ✅ FIX: Use correct key "epd_products" and pass list
+            # ✅ CRITICAL: Store candidates for later attachment
+            epd_products_by_uri = {
+                product.get("uri"): product 
+                for product in candidates_list
+            }
+            
+            # Call Similarity Judge
             result = await self.similarity_judge.execute({
                 "bim_material": bim_material,
                 "epd_products": candidates_list,
@@ -426,25 +436,38 @@ class AgentOrchestrator:
                 return {"success": False, "error": error}
             
             data = result.get("data", {})
-            evaluated = data.get("evaluations", [])  # ✅ CORRECT KEY
+            evaluations = data.get("evaluations", [])
+            
+            # ✅ CRITICAL FIX: Attach EPD product data to each evaluation
+            enriched_evaluations = []
+            for eval_data in evaluations:
+                epd_uri = eval_data.get("epd_uri")
+                epd_product = epd_products_by_uri.get(epd_uri, {})
+                
+                # Create enriched evaluation with product data
+                enriched_eval = {
+                    **eval_data,
+                    "epd_product": epd_product  # ← THE MISSING PIECE!
+                }
+                enriched_evaluations.append(enriched_eval)
             
             step_time = time.time() - step_start
             
-            avg_score = sum(p.get("total_score", 0) for p in evaluated) / len(evaluated) if evaluated else 0
+            avg_score = sum(p.get("total_score", 0) for p in enriched_evaluations) / len(enriched_evaluations) if enriched_evaluations else 0
             
             workflow_steps[-1].update({
                 "status": "completed",
                 "completed_at": datetime.now().isoformat(),
                 "execution_time": step_time,
-                "result_summary": f"Evaluated {len(evaluated)} products (avg score: {avg_score:.2f})",
+                "result_summary": f"Evaluated {len(enriched_evaluations)} products (avg score: {avg_score:.2f})",
                 "details": {
-                    "evaluated_count": len(evaluated),
+                    "evaluated_count": len(enriched_evaluations),
                     "average_score": round(avg_score, 2)
                 }
             })
             
-            # ✅ FIX: Return correct structure
-            return {"success": True, "data": {"evaluations": evaluated}}
+            # ✅ FIX: Return enriched evaluations with product data
+            return {"success": True, "data": {"evaluations": enriched_evaluations}}
             
         except Exception as e:
             workflow_steps[-1].update({
